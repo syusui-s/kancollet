@@ -1,24 +1,43 @@
-#kancollet-timers{
-	border: 0px #000000 solid;
+#kancollet{
+	width: 800px;
+	overflow:hidden;
+	position: fixed;
+	top: 0;
+	left: 50%;
+	right: 50%;
+	margin: 1px -400px 0 -400px;
+	padding: 0 0.5em 0 0.5em;
+	background-color: #ffffff;
 }
-#kancollet-timers #expedition{
+
+#kancollet-timers-form{
+	float: left;
+	margin: -2px 0 0 0;
+	background-color: #ffffff;
+}
+
+#kancollet-timers-table{
+	border: 0px;
+}
+#kancollet-timers-table #expedition{
 	color: #ffffff;
 	background-color: #30adb2;
 }
 
-#kancollet-timers #dock{
+#kancollet-timers-table #dock{
 	color: #ffffff;
 	background-color: #81c838;
 }
-#kancollet-timers #arsenal{
+#kancollet-timers-table #arsenal{
 	color: #ffffff;
 	background-color: #ff6600;
 }
 
-#kancollet-timers th,td{
+#kancollet-timers-table th,td{
 	font-size: 12px;
 	border: 1px #000000 solid;
 	padding: 0 0.25em 0 0.25em;
+	margin: 0;
 	text-align: right;
 }
 .timer-name{
@@ -31,4 +50,11 @@
 	height: 1em;
 	width: 1em;
 }
+#kancollet-setting-form{
+	text-align: right;
+	float: right;
+	background-color: #ffffff;
+}
 
+.clear{ clear: both; }
+.clear hr{ display: none; }

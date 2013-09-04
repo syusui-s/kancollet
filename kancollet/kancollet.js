@@ -1,10 +1,11 @@
 function KancolletTimer(type,num,name){
-	this.type = type;
-	this.num  = num;
-	this.name = name;
+	this.type    = type;
+	this.num     = num;
+	this.name    = name;
+	this.element = null;
 }
 
-KancolletTimer.prototype.addTimer = function(){
+KancolletTimer.prototype.appendElement = function(){
 	var td = document.createElement('td');
 	td.setAttribute('class','timer');
 	td.setAttribute('id','timer'+this.type+this.num.toString());
@@ -26,7 +27,7 @@ KancolletTimer.prototype.addTimer = function(){
 	td.appendChild(timer_show);
 	td.appendChild(timer_button);
 
-	var rows = document.getElementById('kancollet-timers').rows;
+	var rows = document.getElementById('kancollet-timers-table').rows;
 	var th   = null;
 	for(var i=0;i<rows.length;i++){
 		if(rows[i].childNodes[0].getAttribute('id') === this.type){
@@ -42,11 +43,13 @@ KancolletTimer.prototype.settingTimer = function(elem){
 }
 
 function KancolletTable(){
+	this.element = null;
+	this.timers = {};
 }
 
-KancolletTable.prototype.addTable = function(){
+KancolletTable.prototype.appendElement = function(){
 	var table = document.createElement('table');
-	table.setAttribute('id','kancollet-timers');
+	table.setAttribute('id','kancollet-timers-table');
 
 	types = {expedition:'遠征',dock:'入渠',arsenal:'建造'}
 	for(key in types){
@@ -57,6 +60,25 @@ KancolletTable.prototype.addTable = function(){
 		th.innerText = types[key];
 		tr.appendChild(th);
 	}
-	document.getElementById('kancollet-form').appendChild(table);
+	this.element = document.getElementById('kancollet-timers-form').appendChild(table);
 }
 
+function KancolletPreset(){
+
+}
+
+function removeKancollet(){
+	document.body.removeChild(document.getElementById('kancollet'));
+}
+
+function createKancollet(){
+	var kancollet = document.createElement('div');
+	kancollet.setAttribute('id','kancollet');
+	
+	var kancollet_timers = document.createElement('form');
+	kancollet_timers.setAttribute('id','kancollet-timers-form');
+
+	var kancollet_setting_form = document.createElement('form');
+	kancollet_timers.setAttribute('id','kancollet-timers-form');
+
+}
