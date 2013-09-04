@@ -56,10 +56,17 @@
 	background-color: #ffffff;
 }
 
-#kancollet-timersetting-form a,span{
+#kancollet-timersetting-form *{
 	margin-left: 0.25em;
 	margin-right: 0.25em;
 }
+#kancollet-timersetting-softwarename{
+	margin-bottom: -1px;
+}
+#kancollet-timersetting-closeimg{
+	margin-bottom: -3px;
+}
+
 
 .clear{ clear: both; }
 .clear hr{ display: none; }
