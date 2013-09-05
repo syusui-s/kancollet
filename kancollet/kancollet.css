@@ -46,9 +46,14 @@
 	margin-left: 0.5em;
 }
 .timer-button{
+	margin: 0;
+	padding: 0;
 	margin-left: 0.25em;
 	height: 1em;
 	width: 1em;
+}
+.timer-button img{
+	margin-bottom: -3px;
 }
 #kancollet-timersetting-form{
 	text-align: right;

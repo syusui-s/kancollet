@@ -3,14 +3,14 @@ var Kancollet = (function(){
 	//////////////////////////////////
 	// Timer
 	function Timer(name,type,id){
+		this.name    = name;
 		this.type    = type;
 		this.id      = id;
-		this.name    = name;
 		this.time    = null;
 		this.element = null;
-		// private
 		this.endtime = null;
 		this.timer   = null;
+		this.timer_show = null;
 	}
 
 	Timer.prototype.createElement = function(){
@@ -20,17 +20,22 @@ var Kancollet = (function(){
 
 		var timer_name = document.createElement('span');
 		timer_name.className = 'timer-name';
-		timer_name.innerText = this.name;
+		timer_name.textContent = this.name;
 
 		var timer_show = document.createElement('span');
 		timer_show.className = 'timer-show';
-		timer_show.innerText = '　未設定　';
+		timer_show.textContent = '　未設定　';
 
-		var timer_button = document.createElement('input');
+		var timer_button = document.createElement('a');
 		timer_button.type = 'button';
 		timer_button.className = 'timer-button';
-		timer_button.value = '';
-		timer_button.setAttribute('onclick','settingTimer(this.parentNode)');
+		timer_button.setAttribute('href','javascript:Kancollet.TimerSetting.setTargetTimer(this.parentNode)');
+		var timer_button_img = document.createElement('img');
+		timer_button_img.src = './kancollet/img/setting_button.png';
+		timer_button_img.alt = '設定';
+		timer_button_img.width  = '14';
+		timer_button_img.height = '14';
+		timer_button.appendChild(timer_button_img);
 
 		td.appendChild(timer_name);
 		td.appendChild(timer_show);
@@ -41,30 +46,19 @@ var Kancollet = (function(){
 		return this.element;
 	}
 
-	Timer.prototype.parseTime = function(timestr){
-		var timearr = (/(\d{2}):(\d{2}):(\d{2})/).exec(timestr);
-		var time = {};
-		time.hour = +time[1];
-		time.min  = +time[2];
-		time.sec  = +time[3];
-		return time;
-	}
-
-	Timer.prototype.msToReadableTime = function(microsecond){
-		second = microsecond/1000;
-		
-	}
-
-	Timer.prototype.settingTimer = function(timestr){
+	Timer.prototype.setTime = function(time){
 		this.time = time;
-		this.element.nodeList[1].innerText = time;
+		this.timer_show.textContent = time;
 	}
 
 	Timer.prototype.startTimer = function(){
-		if(!this.timer){
-			time = parseTime(this.time);
+		if(!this.timer && this.time){
+			var time = Timer.parseTime(this.time);
 			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
-			this.timer   = setInterval(this.showTimer,1000);
+			// this.timer   = setInterval(this.showTimer,1000);
+			this.timer = setInterval(function(timer){
+				timer.showTimer();
+			},500,this)
 		}else return false;
 	}
 
@@ -73,12 +67,48 @@ var Kancollet = (function(){
 			clearInterval(this.timer);
 			this.timer   = null;
 			this.endtime = null;
+			if(this.time === '00:00:00'){
+				this.timer_show.textContent = '　完了　';
+				this.time = null;
+			}
 		}else return false;
 	}
 
 	Timer.prototype.showTimer = function(){
-		elapsed = Date.now() - this.endtime();
+		var remain = this.endtime - Date.now();
+		var timestr = Timer.timeToReadableStr(Timer.msToTime(remain));
+		if(remain <= 0){
+			this.stopTimer();
+			return false;
+		}
+		// console.log(timestr);
+		this.setTime(timestr);
+	}
+	
+	Timer.parseTime = function(timestr){
+		var timearr = (/(\d{2}):(\d{2}):(\d{2})/).exec(timestr);
+		var time = {};
+		time.hour = +timearr[1];
+		time.min  = +timearr[2];
+		time.sec  = +timearr[3];
+		return time;
+	}
+	
+	Timer.msToTime = function(microsecond){
+		var rtn = {};
+		var sec = microsecond/1000;
+		rtn.hour = parseInt(sec/3600);sec = sec%3600;
+		rtn.min  = parseInt(sec/60);sec = sec%60;
+		rtn.sec  = parseInt(sec);
+		return rtn;
+	}
 
+	Timer.timeToReadableStr = function(time){
+		var rtn = {};
+		rtn.hour = ('00'+time.hour.toString()).slice(-2);
+		rtn.min  = ('00'+time.min.toString()).slice(-2);
+		rtn.sec  = ('00'+time.sec.toString()).slice(-2);
+		return rtn.hour+':'+rtn.min+':'+rtn.sec;
 	}
 
 	//////////////////////////////////
@@ -98,7 +128,7 @@ var Kancollet = (function(){
 			var th = document.createElement('th');
 			th.setAttribute('id',types[i][0]);
 			th.setAttribute('scope','row');
-			th.innerText = types[i][1];
+			th.textContent = types[i][1];
 			tr.appendChild(th);
 		}
 		this.element = document.getElementById('kancollet-timers-form').appendChild(table);
@@ -129,16 +159,23 @@ var Kancollet = (function(){
 
 	TimersTable.prototype.removeTimer = function(type,id){
 		var key = type+'-'+id.toString();
-		var timer = this.timers[key]
+		console.log(key)
+		var timer = this.timers[key];
+
 		if(timer){
 			var parentnode = timer.element.parentNode;
 			parentnode.removeChild(timer.element);
 			delete this.timers[key];
+			return true;
 		}else{
 			return false;
 		}
 	}
 
+	var SettingTimer = {};
+	SettingTimer.target_timer = null;
+
+	
 	function removeKancollet(){
 		document.body.removeChild(document.getElementById('kancollet'));
 	}
@@ -176,10 +213,10 @@ var Kancollet = (function(){
 
 			var kancollet_timersetting_setting = document.createElement('a');
 			kancollet_timersetting_setting.setAttribute('href','#');
-			kancollet_timersetting_setting.innerText = '設定';
+			kancollet_timersetting_setting.textContent = '設定';
 
 			var kancollet_timersetting_close = document.createElement('a');
-			kancollet_timersetting_close.href = 'javascript:removeKancollet();';
+			kancollet_timersetting_close.href = 'javascript:Kancollet.remove();';
 			var kancollet_timersetting_closeimg = document.createElement('img');
 			kancollet_timersetting_closeimg.id = 'kancollet-timersetting-closeimg'
 			kancollet_timersetting_closeimg.src = './kancollet/img/close_button.png';
@@ -205,7 +242,7 @@ var Kancollet = (function(){
 			kancollet.appendChild(kancollet_timersetting_form);
 
 			document.body.appendChild(kancollet);
-			timers_table = new TimersTable(); // keep this global to debug
+			var timers_table = new TimersTable(); // keep this global to debug
 			timers_table.appendElement();
 
 			timers_table.addTimer('第二艦隊','expedition',1);
@@ -218,13 +255,14 @@ var Kancollet = (function(){
 			timers_table.addTimer('ドック1','arsenal',1);
 			timers_table.addTimer('ドック2','arsenal',2);
 
+			ns.timers_table = timers_table;
 		}else return false;
 	}
 
-	// namespace exports
+	// namespace
 	ns.Timer = Timer;
 	ns.TimersTable = TimersTable;
-	ns.createKancollet = createKancollet;
-	ns.removeKancollet = removeKancollet;
+	ns.create = createKancollet;
+	ns.remove = removeKancollet;
 	return ns;
 }());
