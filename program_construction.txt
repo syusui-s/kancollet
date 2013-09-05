@@ -14,7 +14,7 @@ Kancollet - 定義されるKancolletのメインモジュール。以下のク�
 		.constructor(name,type,id) - データを保持させる。
 		.startTimer() - setIntervalを新たに作り、タイマーを始動させる。
 		.stopTimer() - crearIntervalを用い、タイマーを停止させる。
-		.setTime() - .time、
+		.setTime() - .time, show_time
 		.showTime()
 		.createElement() - td要素を作成し、.elementに代入する。返り値はtd要素。
 

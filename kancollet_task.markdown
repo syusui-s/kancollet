@@ -1,8 +1,8 @@
 # MAIN
-[ ] 時、分、秒をちゃんと入力欄からコピーできるようにする
-[ ] ver0.1をリリースする。
+[x] ver0.1をリリースする。
 
 # DONE
+[x] 時、分、秒をちゃんと入力欄からコピーできるようにする
 [x] TimerSettingモジュールのsetTargetTimerを作成
 [x] KancolletTimerにより、タイマーを設定できるようにする
 [x] Firefox/Chromeに対応させる

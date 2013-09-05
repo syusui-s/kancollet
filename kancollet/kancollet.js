@@ -1,6 +1,6 @@
 var Kancollet = (function(){
 	var ns = {};
-	var baseurl = '';
+	var baseurl = './';
 	//////////////////////////////////
 	// Timer
 	function Timer(name,type,id){
@@ -30,9 +30,10 @@ var Kancollet = (function(){
 		var timer_button = document.createElement('a');
 		timer_button.type = 'button';
 		timer_button.className = 'timer-button';
+		timer_button.href = '#'
 		timer_button.setAttribute('onclick','Kancollet.TimerSetting.setTargetTimer(this.parentNode)');
 		var timer_button_img = document.createElement('img');
-		timer_button_img.src = './kancollet/img/setting_button.png';
+		timer_button_img.src = baseurl+'kancollet/img/setting_button.png';
 		timer_button_img.alt = '設定';
 		timer_button_img.width  = '14';
 		timer_button_img.height = '14';
@@ -208,6 +209,10 @@ var Kancollet = (function(){
 
 	function createKancollet(){
 		if(!document.getElementById('kancollet')){
+			var kancollet_stylesheet = document.createElement('link');
+			kancollet_stylesheet.rel = 'stylesheet';
+			kancollet_stylesheet.href = baseurl+'kancollet/kancollet.css';
+
 			var kancollet = document.createElement('div');
 			kancollet.id = 'kancollet';
 			
@@ -236,20 +241,22 @@ var Kancollet = (function(){
 
 			var kancollet_timersetting_softwarename = document.createElement('img');
 			kancollet_timersetting_softwarename.id = 'kancollet-timersetting-softwarename';
-			kancollet_timersetting_softwarename.src = './kancollet/img/kancollet.png';
+			kancollet_timersetting_softwarename.src = baseurl + 'kancollet/img/kancollet.png';
 			kancollet_timersetting_softwarename.alt = 'Kancollet';
 			kancollet_timersetting_softwarename.width  = '62';
 			kancollet_timersetting_softwarename.height = '11';
 
+			/*
 			var kancollet_timersetting_setting = document.createElement('a');
 			kancollet_timersetting_setting.setAttribute('href','#');
 			kancollet_timersetting_setting.textContent = '設定';
+			*/
 
 			var kancollet_timersetting_close = document.createElement('a');
 			kancollet_timersetting_close.href = 'javascript:Kancollet.remove();';
 			var kancollet_timersetting_closeimg = document.createElement('img');
 			kancollet_timersetting_closeimg.id = 'kancollet-timersetting-closeimg'
-			kancollet_timersetting_closeimg.src = './kancollet/img/close_button.png';
+			kancollet_timersetting_closeimg.src = baseurl+'kancollet/img/close_button.png';
 			kancollet_timersetting_closeimg.alt = '閉じる';
 			kancollet_timersetting_closeimg.width  = '16';
 			kancollet_timersetting_closeimg.height = '16';
@@ -264,13 +271,14 @@ var Kancollet = (function(){
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_stop);
 			kancollet_timersetting_form.appendChild(document.createElement('br'));
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_softwarename);
-			kancollet_timersetting_form.appendChild(kancollet_timersetting_setting);
+			// kancollet_timersetting_form.appendChild(kancollet_timersetting_setting);
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_close);
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_cleardiv);
 
 			kancollet.appendChild(kancollet_timers_form);
 			kancollet.appendChild(kancollet_timersetting_form);
 
+			document.head.appendChild(kancollet_stylesheet);
 			document.body.appendChild(kancollet);
 			var timers_table = new TimersTable(); // keep this global to debug
 			timers_table.appendElement();
