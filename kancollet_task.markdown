@@ -1,7 +1,7 @@
 # MAIN
-[x] ver0.1をリリースする。
 
 # DONE
+[x] ver0.1をリリースする。
 [x] 時、分、秒をちゃんと入力欄からコピーできるようにする
 [x] TimerSettingモジュールのsetTargetTimerを作成
 [x] KancolletTimerにより、タイマーを設定できるようにする

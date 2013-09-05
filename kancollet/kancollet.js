@@ -57,7 +57,6 @@ var Kancollet = (function(){
 		if(!this.timer && this.time){
 			var time = Timer.parseTime(this.time);
 			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
-			// this.timer   = setInterval(this.showTimer,1000);
 			this.timer = setInterval(function(timer){
 				timer.showTimer();
 			},500,this)
@@ -66,13 +65,11 @@ var Kancollet = (function(){
 
 	Timer.prototype.stopTimer = function(){
 		if(this.timer){
+			if(this.endtime - Date.now() <= 0) this.timer_show.textContent = '¡¡´°Î»¡¡';
 			clearInterval(this.timer);
 			this.timer   = null;
+			this.time = null;
 			this.endtime = null;
-			if(this.time === '00:00:00'){
-				this.timer_show.textContent = '¡¡´°Î»¡¡';
-				this.time = null;
-			}
 		}else return false;
 	}
 
@@ -188,15 +185,17 @@ var Kancollet = (function(){
 		else false;
 	}
 	TimerSetting.settingTimer = function(){
-		if(this.target_timer){
+		if(this.target_timer && !this.target_timer.timer){
 			var time = document.getElementById('kancollet-setting-time').value;
 			this.target_timer.setTime(time);
 		}
 	}
 
 	TimerSetting.startTimer = function(){
-		this.settingTimer();
-		if(this.target_timer) this.target_timer.startTimer();
+		if(this.target_timer && !this.target_timer.timer){
+			this.settingTimer();
+			this.target_timer.startTimer();
+		}
 	}
 
 	TimerSetting.stopTimer = function(){
