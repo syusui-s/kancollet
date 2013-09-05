@@ -1,6 +1,6 @@
 var Kancollet = (function(){
 	var ns = {};
-	var baseurl = './';
+	var baseurl = 'http://syusui-s.github.io/kancollet/';
 	//////////////////////////////////
 	// Timer
 	function Timer(name,type,id){
