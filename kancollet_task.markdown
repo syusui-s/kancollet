@@ -1,7 +1,9 @@
 # MAIN
-[ ] TimerSettingモジュールのsetTargetTimerを作成
+[ ] 時、分、秒をちゃんと入力欄からコピーできるようにする
+[ ] ver0.1をリリースする。
 
 # DONE
+[x] TimerSettingモジュールのsetTargetTimerを作成
 [x] KancolletTimerにより、タイマーを設定できるようにする
 [x] Firefox/Chromeに対応させる
 [x] KancolletTimerにstart,stop,configメソッドを追加
