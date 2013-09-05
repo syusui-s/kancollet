@@ -25,7 +25,7 @@ var Kancollet = (function(){
 
 		var timer_show = document.createElement('span');
 		timer_show.className = 'timer-show';
-		timer_show.textContent = 'ã€€æœªè¨­å®š ';
+		timer_show.textContent = '¡¡Ì¤ÀßÄê ';
 
 		var timer_button = document.createElement('a');
 		timer_button.type = 'button';
@@ -34,7 +34,7 @@ var Kancollet = (function(){
 		timer_button.setAttribute('onclick','Kancollet.TimerSetting.setTargetTimer(this.parentNode)');
 		var timer_button_img = document.createElement('img');
 		timer_button_img.src = baseurl+'kancollet/img/setting_button.png';
-		timer_button_img.alt = 'è¨­å®š';
+		timer_button_img.alt = 'ÀßÄê';
 		timer_button_img.width  = '14';
 		timer_button_img.height = '14';
 		timer_button.appendChild(timer_button_img);
@@ -70,7 +70,7 @@ var Kancollet = (function(){
 			this.timer   = null;
 			this.endtime = null;
 			if(this.time === '00:00:00'){
-				this.timer_show.textContent = 'ã€€å®Œäº†ã€€';
+				this.timer_show.textContent = '¡¡´°Î»¡¡';
 				this.time = null;
 			}
 		}else return false;
@@ -124,7 +124,7 @@ var Kancollet = (function(){
 		var table = document.createElement('table');
 		table.id = 'kancollet-timers-table';
 
-		var types = [ ['expedition','é å¾'],['dock','å…¥æ¸ '],['arsenal','å»ºé€ '] ];
+		var types = [ ['expedition','±óÀ¬'],['dock','Æşµô'],['arsenal','·úÂ¤'] ];
 		for(var i=0;i<types.length;i++){
 			var tr = table.insertRow(-1);
 			var th = document.createElement('th');
@@ -231,12 +231,12 @@ var Kancollet = (function(){
 
 			var kancollet_timersetting_start = document.createElement('input');
 			kancollet_timersetting_start.type = 'button';
-			kancollet_timersetting_start.value = 'é–‹å§‹';
+			kancollet_timersetting_start.value = '³«»Ï';
 			kancollet_timersetting_start.setAttribute('onclick','Kancollet.TimerSetting.startTimer()');
 
 			var kancollet_timersetting_stop = document.createElement('input');
 			kancollet_timersetting_stop.type = 'button';
-			kancollet_timersetting_stop.value = 'åœæ­¢';
+			kancollet_timersetting_stop.value = 'Ää»ß';
 			kancollet_timersetting_stop.setAttribute('onclick','Kancollet.TimerSetting.stopTimer()');
 
 			var kancollet_timersetting_softwarename = document.createElement('img');
@@ -249,7 +249,7 @@ var Kancollet = (function(){
 			/*
 			var kancollet_timersetting_setting = document.createElement('a');
 			kancollet_timersetting_setting.setAttribute('href','#');
-			kancollet_timersetting_setting.textContent = 'è¨­å®š';
+			kancollet_timersetting_setting.textContent = 'ÀßÄê';
 			*/
 
 			var kancollet_timersetting_close = document.createElement('a');
@@ -257,7 +257,7 @@ var Kancollet = (function(){
 			var kancollet_timersetting_closeimg = document.createElement('img');
 			kancollet_timersetting_closeimg.id = 'kancollet-timersetting-closeimg'
 			kancollet_timersetting_closeimg.src = baseurl+'kancollet/img/close_button.png';
-			kancollet_timersetting_closeimg.alt = 'é–‰ã˜ã‚‹';
+			kancollet_timersetting_closeimg.alt = 'ÊÄ¤¸¤ë';
 			kancollet_timersetting_closeimg.width  = '16';
 			kancollet_timersetting_closeimg.height = '16';
 			kancollet_timersetting_close.appendChild(kancollet_timersetting_closeimg);
@@ -283,15 +283,15 @@ var Kancollet = (function(){
 			var timers_table = new TimersTable(); // keep this global to debug
 			timers_table.appendElement();
 
-			timers_table.addTimer('ç¬¬äºŒè‰¦éšŠ','expedition',1);
-			timers_table.addTimer('ç¬¬ä¸‰è‰¦éšŠ','expedition',2);
-			timers_table.addTimer('ç¬¬å››è‰¦éšŠ','expedition',3);
+			timers_table.addTimer('ÂèÆó´ÏÂâ','expedition',1);
+			timers_table.addTimer('Âè»°´ÏÂâ','expedition',2);
+			timers_table.addTimer('Âè»Í´ÏÂâ','expedition',3);
 			
-			timers_table.addTimer('ãƒ‰ãƒƒã‚¯1','dock',1);
-			timers_table.addTimer('ãƒ‰ãƒƒã‚¯2','dock',2);
+			timers_table.addTimer('¥É¥Ã¥¯1','dock',1);
+			timers_table.addTimer('¥É¥Ã¥¯2','dock',2);
 
-			timers_table.addTimer('ãƒ‰ãƒƒã‚¯1','arsenal',1);
-			timers_table.addTimer('ãƒ‰ãƒƒã‚¯2','arsenal',2);
+			timers_table.addTimer('¥É¥Ã¥¯1','arsenal',1);
+			timers_table.addTimer('¥É¥Ã¥¯2','arsenal',2);
 
 			ns.timers_table = timers_table;
 		}else return false;
