@@ -1,4 +1,5 @@
 # MAIN
+[ ] TimersTable.addTimerが動くようにする。thがnullのまま？
 [ ] KancolletTimerにより、タイマーを設定できるようにする
 [ ] KancolletTimerにstart,stop,configメソッドを追加
 
