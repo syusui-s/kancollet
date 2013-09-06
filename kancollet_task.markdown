@@ -1,6 +1,9 @@
-# MAIN
+# MAIN new: lower old: upper
+[ ] 完了した時に、音による通知を行う
+[ ] 完了した時に、背景色を変更するようにする
 
-# DONE
+# DONE new: upper old: lower
+[x] Fxで02:00:00と表示される問題を修正。
 [x] ver0.1をリリースする。
 [x] 時、分、秒をちゃんと入力欄からコピーできるようにする
 [x] TimerSettingモジュールのsetTargetTimerを作成
