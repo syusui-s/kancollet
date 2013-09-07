@@ -51,11 +51,13 @@ var Kancollet = (function(){
 	Timer.prototype.setTime = function(time){
 		this.time = time;
 		this.timer_show.textContent = time;
+		this.element.style.backgroundColor = '#ffffff';
 	}
 
 	Timer.prototype.startTimer = function(){
 		if(!this.timer && this.time){
 			var time = Timer.parseTime(this.time);
+			this.element.style.backgroundColor = '#ffffff';
 			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
 			this.timer = setInterval(function(timer){
 				timer.showTimer();
@@ -65,11 +67,15 @@ var Kancollet = (function(){
 
 	Timer.prototype.stopTimer = function(){
 		if(this.timer){
-			if(this.endtime - Date.now() <= 0) this.timer_show.textContent = '¡¡´°Î»¡¡';
+			if(this.endtime - Date.now() <= 0){
+				this.timer_show.textContent = '¡¡´°Î»¡¡';
+				this.element.style.backgroundColor = '#a0f05a';
+			}
 			clearInterval(this.timer);
 			this.timer   = null;
 			this.time = null;
 			this.endtime = null;
+			TimerSetting.changeButtonEnable();
 		}else return false;
 	}
 
@@ -134,11 +140,10 @@ var Kancollet = (function(){
 	}
 
 	TimersTable.prototype.addTimer = function(name,type,id){
-		if(!this.timers[type+'-'+id.toString()]){
-			var key   = type+'-'+id.toString();
+		var key   = type+'-'+id.toString();
+		if(!this.timers[key]){
 			var timer = new Timer(name,type,id);
 			timer.createElement();
-
 			var rows = this.element.rows;
 			var tr   = null;
 			for(var i=0;i<rows.length;i++){
@@ -175,18 +180,22 @@ var Kancollet = (function(){
 	TimerSetting.target_timer = null;
 	TimerSetting.setTargetTimer = function(obj){
 		var key = ((/timer-(\w+-\d)/).exec(obj.id))[1];
-		if(ns.timers_table.timers[key]){
-			this.target_timer = ns.timers_table.timers[key];
-			var timer_adjust = document.getElementById('kancollet-setting-time');
+		if(this.target_timer = ns.timers_table.timers[key]){
+			var timer_adjust = document.getElementById('kancollet-timersetting-time');
+			this.target_timer.element.style.backgroundColor = '#ffffff';
 			timer_adjust.disabled = false;
-			if(this.target_timer.time !== null) timer_adjust.value = this.target_timer.time;
+
+			if(this.target_timer.time) timer_adjust.value = this.target_timer.time;
 			else timer_adjust.value = '00:00:00';
+
+			this.changeButtonEnable();
 		}
 		else false;
 	}
+
 	TimerSetting.settingTimer = function(){
 		if(this.target_timer && !this.target_timer.timer){
-			var time = document.getElementById('kancollet-setting-time').value;
+			var time = document.getElementById('kancollet-timersetting-time').value;
 			this.target_timer.setTime(time);
 		}
 	}
@@ -195,11 +204,27 @@ var Kancollet = (function(){
 		if(this.target_timer && !this.target_timer.timer){
 			this.settingTimer();
 			this.target_timer.startTimer();
+			this.changeButtonEnable();
 		}
 	}
 
 	TimerSetting.stopTimer = function(){
-		if(this.target_timer) this.target_timer.stopTimer();
+		if(this.target_timer){
+			this.target_timer.stopTimer();
+			this.changeButtonEnable();
+		}
+	}
+
+	TimerSetting.changeButtonEnable = function(){
+		var start_button = document.getElementById('kancollet-timersetting-start');
+		var stop_button = document.getElementById('kancollet-timersetting-stop');
+		if(this.target_timer.timer){
+			start_button.disabled = true;
+			stop_button.disabled = false;
+		}else{
+			start_button.disabled = false;
+			stop_button.disabled = true;
+		}
 	}
 
 	function removeKancollet(){
@@ -222,20 +247,24 @@ var Kancollet = (function(){
 			kancollet_timersetting_form.id = 'kancollet-timersetting-form';
 			
 			var kancollet_timersetting_time = document.createElement('input');
-			kancollet_timersetting_time.id = 'kancollet-setting-time';
+			kancollet_timersetting_time.id = 'kancollet-timersetting-time';
 			kancollet_timersetting_time.type = 'time';
 			kancollet_timersetting_time.step = '1';
 			kancollet_timersetting_time.disabled = true;
 			kancollet_timersetting_time.setAttribute('onchange','Kancollet.TimerSetting.settingTimer()');
 
 			var kancollet_timersetting_start = document.createElement('input');
+			kancollet_timersetting_start.id = 'kancollet-timersetting-start';
 			kancollet_timersetting_start.type = 'button';
 			kancollet_timersetting_start.value = '³«»Ï';
+			kancollet_timersetting_start.disabled = true;
 			kancollet_timersetting_start.setAttribute('onclick','Kancollet.TimerSetting.startTimer()');
 
 			var kancollet_timersetting_stop = document.createElement('input');
+			kancollet_timersetting_stop.id = 'kancollet-timersetting-stop';
 			kancollet_timersetting_stop.type = 'button';
 			kancollet_timersetting_stop.value = 'Ää»ß';
+			kancollet_timersetting_stop.disabled = true;
 			kancollet_timersetting_stop.setAttribute('onclick','Kancollet.TimerSetting.stopTimer()');
 
 			var kancollet_timersetting_softwarename = document.createElement('img');
@@ -279,7 +308,7 @@ var Kancollet = (function(){
 
 			document.head.appendChild(kancollet_stylesheet);
 			document.body.appendChild(kancollet);
-			var timers_table = new TimersTable(); // keep this global to debug
+			var timers_table = new TimersTable();
 			timers_table.appendElement();
 
 			timers_table.addTimer('ÂèÆó´ÏÂâ','expedition',1);
