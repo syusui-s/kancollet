@@ -28,7 +28,6 @@ var Kancollet = (function(){
 		timer_show.textContent = '　未設定 ';
 
 		var timer_button = document.createElement('a');
-		timer_button.type = 'button';
 		timer_button.className = 'timer-button';
 		timer_button.href = '#'
 		timer_button.setAttribute('onclick','Kancollet.TimerSetting.setTargetTimer(this.parentNode)');
@@ -57,12 +56,14 @@ var Kancollet = (function(){
 	Timer.prototype.startTimer = function(){
 		if(!this.timer && this.time){
 			var time = Timer.parseTime(this.time);
+			if(!time) return false;
 			this.element.style.backgroundColor = '#ffffff';
 			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
 			this.timer = setInterval(function(timer){
 				timer.showTimer();
 			},500,this)
 		}else return false;
+		return true;
 	}
 
 	Timer.prototype.stopTimer = function(){
@@ -77,6 +78,7 @@ var Kancollet = (function(){
 			this.endtime = null;
 			TimerSetting.changeButtonEnable();
 		}else return false;
+		return true;
 	}
 
 	Timer.prototype.showTimer = function(){
@@ -92,6 +94,7 @@ var Kancollet = (function(){
 	Timer.parseTime = function(timestr){
 		if(timestr.length < 9) timestr+=':00';
 		var timearr = (/(\d{2}):(\d{2}):(\d{2})/).exec(timestr);
+		if(!timearr) return false;
 		var time = {};
 		time.hour = +timearr[1];
 		time.min  = +timearr[2];
@@ -163,7 +166,6 @@ var Kancollet = (function(){
 
 	TimersTable.prototype.removeTimer = function(type,id){
 		var key = type+'-'+id.toString();
-		console.log(key)
 		var timer = this.timers[key];
 
 		if(timer){
@@ -176,6 +178,8 @@ var Kancollet = (function(){
 		}
 	}
 
+	//////////////////////////////////
+	// TimerSetting
 	var TimerSetting = {};
 	TimerSetting.target_timer = null;
 	TimerSetting.setTargetTimer = function(obj){
@@ -203,7 +207,9 @@ var Kancollet = (function(){
 	TimerSetting.startTimer = function(){
 		if(this.target_timer && !this.target_timer.timer){
 			this.settingTimer();
-			this.target_timer.startTimer();
+			if(!this.target_timer.startTimer()){
+				alert('書式が間違っています。正しい書式で入れなおしてください。');
+			}
 			this.changeButtonEnable();
 		}
 	}
