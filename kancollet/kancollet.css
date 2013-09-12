@@ -1,3 +1,7 @@
+/* kancollet css
+ *      syusui_s
+ */
+
 #kancollet{
 	width: 800px;
 	overflow:hidden;
@@ -16,9 +20,14 @@
 	background-color: #ffffff;
 }
 
-#kancollet-timers-table{
-	border: 0px;
+#kancollet-timers-table th,td{
+	font-size: 12px;
+	border: 1px #000000 solid;
+	padding: 0 0.25em 0 0.25em;
+	margin: 0;
+	text-align: right;
 }
+
 #kancollet-timers-table #expedition{
 	color: #ffffff;
 	background-color: #30adb2;
@@ -28,23 +37,16 @@
 	color: #ffffff;
 	background-color: #81c838;
 }
+
 #kancollet-timers-table #arsenal{
 	color: #ffffff;
 	background-color: #ff6600;
 }
 
-#kancollet-timers-table th,td{
-	font-size: 12px;
-	border: 1px #000000 solid;
-	padding: 0 0.25em 0 0.25em;
-	margin: 0;
-	text-align: right;
-}
-.timer-name{
-}
 .timer-show{
 	margin-left: 0.5em;
 }
+
 .timer-button{
 	margin: 0;
 	padding: 0;
@@ -52,8 +54,12 @@
 	height: 1em;
 	width: 1em;
 }
+
 .timer-button img{
 	margin-bottom: -3px;
+}
+.timer-button img:hover{
+	cursor: pointer;
 }
 #kancollet-timersetting-form{
 	text-align: right;
@@ -71,7 +77,9 @@
 #kancollet-timersetting-closeimg{
 	margin-bottom: -3px;
 }
-
+#kancollet-timersetting-closeimg:hover{
+	cursor: pointer;
+}
 
 .clear{ clear: both; }
 .clear hr{ display: none; }

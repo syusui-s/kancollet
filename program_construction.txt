@@ -15,17 +15,17 @@ Kancollet - 定義されるKancolletのメインモジュール。以下のク�
 		.startTimer() - setIntervalを新たに作り、タイマーを始動させる。
 		.stopTimer() - crearIntervalを用い、タイマーを停止させる。
 		.setTime() - .time, show_time
-		.showTime()
+		.showTime() - show_time.textContentに対して、計算した残り時間を書き込む
 		.createElement() - td要素を作成し、.elementに代入する。返り値はtd要素。
 
 	TimersTable
 		// variables
-		.timers
-		.element
+		.timers - Timerの配列を扱う。typeとidで管理する連想配列
+		.element - Table要素のノードを保存している変数
 
 		// methods
-		.constructor()
-		.addTimer()
+		.constructor() - 引数は特に無く、セットすると、timersに{}が、elementにnullが代入される。
+		.addTimer(name,type,id) - 名前、タイマー種別、IDの順に入れると、タイマーが追加される
 		.removeTimer()
 		.appendElement()
 
@@ -38,8 +38,10 @@ Kancollet - 定義されるKancolletのメインモジュール。以下のク�
 		.settingTimer()
 
 	Config
-		.timer_csv
 		.constructor()
+		.changeTimerName()
+	Preset
+		.constructor(url)
 
 	.create()
 	.remove()
