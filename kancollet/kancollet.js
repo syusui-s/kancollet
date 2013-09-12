@@ -62,7 +62,9 @@ var Kancollet = (function() {
 			this.timer = setInterval(function(timer){
 				timer.showTimer();
 			},500,this);
-		}else return false;
+		}else{
+			return false;
+		}
 		return true;
 	};
 
@@ -77,7 +79,9 @@ var Kancollet = (function() {
 			this.time = null;
 			this.endtime = null;
 			TimerSetting.changeButtonEnable();
-		}else return false;
+		}else{
+			return false;
+		}
 		return true;
 	};
 
@@ -96,15 +100,22 @@ var Kancollet = (function() {
 			default: '#ffffff',
 			complete: '#a0f05a'
 		};
-		if(bgcolors[key]) this.element.style.backgroundColor = bgcolors[key];
-		else return false;
+		if(bgcolors[key]){
+			this.element.style.backgroundColor = bgcolors[key];
+		}else{
+			return false;
+		}
 	};
 
 	// Class Methods
 	Timer.parseTime = function(timestr){
-		if(timestr.length < 9) timestr+=':00';
+		if(timestr.length < 9){
+			timestr+=':00';
+		}
 		var timearr = (/(\d{2}):(\d{2}):(\d{2})/).exec(timestr);
-		if(!timearr) return false;
+		if(!timearr){
+			return false;
+		}
 		var time = {};
 		time.hour = +timearr[1];
 		time.min  = +timearr[2];
@@ -141,7 +152,7 @@ var Kancollet = (function() {
 		table.id = 'kancollet-timers-table';
 
 		var types = [ ['expedition','±óÀ¬'],['dock','Æþµô'],['arsenal','·úÂ¤'] ];
-		for(var i=0;i<types.length;i++){
+		for(var i=0;i<types.length;i+=1){
 			var tr = table.insertRow(-1);
 			var th = document.createElement('th');
 			th.setAttribute('id',types[i][0]);
@@ -159,7 +170,7 @@ var Kancollet = (function() {
 			timer.createElement();
 			var rows = this.element.rows;
 			var tr   = null;
-			for(var i=0;i<rows.length;i++){
+			for(var i=0;i<rows.length;i+=1){
 				if(rows[i].childNodes[0].id === timer.type){
 					tr = rows[i];
 					break;
@@ -194,17 +205,23 @@ var Kancollet = (function() {
 	TimerSetting.target_timer = null;
 	TimerSetting.setTargetTimer = function(obj){
 		var key = ((/timer-(\w+-\d)/).exec(obj.id))[1];
-		if(this.target_timer = ns.timers_table.timers[key]){
+		this.target_timer = ns.timers_table.timers[key]
+		if(this.target_timer){
 			var timer_adjust = document.getElementById('kancollet-timersetting-time');
 			this.target_timer.changeBGColor('default');
 			timer_adjust.disabled = false;
 
-			if(this.target_timer.time) timer_adjust.value = this.target_timer.time;
-			else timer_adjust.value = '00:00:00';
+			if(this.target_timer.time){
+				timer_adjust.value = this.target_timer.time;
+			}else{
+				timer_adjust.value = '00:00:00';
+			}
 
 			this.changeButtonEnable();
 		}
-		else false;
+		else{
+			return false;
+		}
 	};
 
 	TimerSetting.settingTimer = function(){
@@ -248,7 +265,7 @@ var Kancollet = (function() {
 	}
 
 	function createKancollet(){
-		if(!document.getElementById('kancollet')){
+		if(document.getElementById('kancollet')){
 			var kancollet_stylesheet = document.createElement('link');
 			kancollet_stylesheet.rel = 'stylesheet';
 			kancollet_stylesheet.href = baseurl+'kancollet/kancollet.css';
@@ -338,7 +355,9 @@ var Kancollet = (function() {
 			timers_table.addTimer('¥É¥Ã¥¯2','arsenal',2);
 
 			ns.timers_table = timers_table;
-		}else return false;
+		}else{
+			return false;
+		}
 	}
 
 	// namespace
