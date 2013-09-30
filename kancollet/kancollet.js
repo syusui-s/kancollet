@@ -265,7 +265,7 @@ var Kancollet = (function() {
 	}
 
 	function createKancollet(){
-		if(document.getElementById('kancollet')){
+		if(!document.getElementById('kancollet')){
 			var kancollet_stylesheet = document.createElement('link');
 			kancollet_stylesheet.rel = 'stylesheet';
 			kancollet_stylesheet.href = baseurl+'kancollet/kancollet.css';
@@ -341,6 +341,7 @@ var Kancollet = (function() {
 
 			document.head.appendChild(kancollet_stylesheet);
 			document.body.appendChild(kancollet);
+
 			var timers_table = new TimersTable();
 			timers_table.appendElement();
 
@@ -355,6 +356,8 @@ var Kancollet = (function() {
 			timers_table.addTimer('¥É¥Ã¥¯2','arsenal',2);
 
 			ns.timers_table = timers_table;
+
+			return true;
 		}else{
 			return false;
 		}
