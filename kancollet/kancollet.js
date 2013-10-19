@@ -1,6 +1,8 @@
 var Kancollet = (function() {
 	var ns = {};
 	var baseurl = './';
+	var alarm_basename = baseurl + 'kancollet/alarm';
+
 	//////////////////////////////////
 	// Timer
 	function Timer(name,type,id){
@@ -12,6 +14,7 @@ var Kancollet = (function() {
 		this.endtime = null;
 		this.timer   = null;
 		this.timer_show = null;
+		this.alarm = null;
 	}
 
 	// Instance Methods
@@ -57,6 +60,7 @@ var Kancollet = (function() {
 		if(!this.timer && this.time){
 			var time = Timer.parseTime(this.time);
 			if(!time) return false;
+			this.enableAlarm();
 			this.changeBGColor('default');
 			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
 			this.timer = setInterval(function(timer){
@@ -73,6 +77,7 @@ var Kancollet = (function() {
 			if(this.endtime - Date.now() <= 0){
 				this.timer_show.textContent = '¡¡´°Î»¡¡';
 				this.changeBGColor('complete');
+				this.playAlarm();
 			}
 			clearInterval(this.timer);
 			this.timer   = null;
@@ -104,6 +109,19 @@ var Kancollet = (function() {
 			this.element.style.backgroundColor = bgcolors[key];
 		}else{
 			return false;
+		}
+	};
+
+	Timer.prototype.enableAlarm = function(){
+		this.alarm = new Alarm();
+	};
+
+	Timer.prototype.playAlarm = function(){
+		if(this.alarm){
+			this.alarm.play();
+		}else{
+			this.enableAlarm();
+			this.alarm.play();
 		}
 	};
 
@@ -139,6 +157,50 @@ var Kancollet = (function() {
 		rtn.sec  = ('00'+time.sec.toString()).slice(-2);
 		return rtn.hour+':'+rtn.min+':'+rtn.sec;
 	};
+
+	//////////////////////////////////
+	// Alarm
+	function Alarm(){
+		this.alarm = new Audio();
+		this.prepare();
+	}
+	
+	// Class Variables
+	Alarm.VOLUME = 0.3;
+
+	// Instance Methods
+	Alarm.prototype.prepare = function(){
+		if(!(Alarm.playType)){
+			Alarm.setPlayType();
+		}
+		this.alarm.src = alarm_basename + Alarm.PLAYTYPE;
+		this.alarm.load();
+		this.alarm.volume = Alarm.VOLUME;
+	};
+
+	Alarm.prototype.play = function(){
+		this.alarm.play();
+	}
+
+	// Class Methods
+	Alarm.canPlayTypes = function(){
+		var audio = new Audio();
+		var types = new Array();
+		if(audio.canPlayType('audio/ogg') != ''){ types.push('.ogg'); }
+		if(audio.canPlayType('audio/mp3') != ''){ types.push('.mp3'); }
+		if(audio.canPlayType('audio/wav') != ''){ types.push('.wav'); }
+
+		return types;
+	}
+	
+	Alarm.setPlayType = function(){
+		var types = Alarm.canPlayTypes();
+		if(types[0]){
+			Alarm.PLAYTYPE = types[0]
+		}else{
+			return false;
+		}
+	}
 
 	//////////////////////////////////
 	// TimersTable
