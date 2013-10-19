@@ -1,0 +1,55 @@
+Kancollet - 定義されるKancolletのメインモジュール。以下のクラスやメンバを内包する。
+	Timer
+		// variables
+		.name - タイマの名前。画面に表示される。
+		.type - タイマの種別。遠征、入渠、工廠から一つ文字列として保持する。
+		.id  - タイマの識別子。一桁の数字からなる。数値型。
+		.element - 自身のtd要素を保持する。createElementによってのみ設定可能。初期値はnull。
+		.time : p - 残り時間を文字列として保持する。
+		.endtime : p - 終了時間を日付データ(Date)として保持する。
+		.showtime : p - 時間を表示するエレメントを保持。
+		.timer : p - setIntervalの識別子を保存する。数値型。
+
+		// methods
+		.constructor(name,type,id) - データを保持させる。
+		.startTimer() - setIntervalを新たに作り、タイマーを始動させる。
+		.stopTimer() - crearIntervalを用い、タイマーを停止させる。
+		.setTime() - .time, show_time
+		.showTime() - show_time.textContentに対して、計算した残り時間を書き込む
+		.createElement() - td要素を作成し、.elementに代入する。返り値はtd要素。
+
+	TimersTable
+		// variables
+		.timers - Timerの配列を扱う。typeとidで管理する連想配列
+		.element - Table要素のノードを保存している変数
+
+		// methods
+		.constructor() - 引数は特に無く、セットすると、timersに{}が、elementにnullが代入される。
+		.addTimer(name,type,id) - 名前、タイマー種別、IDの順に入れると、タイマーが追加される
+		.removeTimer(type,id) - タイマーを削除する
+		.appendElement() - 
+
+	ElementCreater
+		// constant
+		elements_template - 定義しておく
+
+		// methods
+		create() - 引数の文字列に応じて、要素を作成する。返り値は作成した要素
+
+	TimerSetting
+		// variables
+		.target_timer - 対象のタイマのノード（要素？）を保存する。
+
+		// funtions
+		.setTargetTimer()
+		.settingTimer()
+
+	Config
+		.constructor()
+		.changeTimerName()
+	Preset
+		.constructor(url)
+
+	.create()
+	.remove()
+	.timers_table
