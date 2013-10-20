@@ -166,7 +166,7 @@ var Kancollet = (function() {
 	}
 	
 	// Class Variables
-	Alarm.VOLUME = 0.3;
+	Alarm.VOLUME = 0.9;
 
 	// Instance Methods
 	Alarm.prototype.prepare = function(){
