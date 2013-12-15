@@ -350,7 +350,7 @@ var Kancollet = (function() {
 
 			var kancollet_timersetting_start = document.createElement('input');
 			kancollet_timersetting_start.id = 'kancollet-timersetting-start';
-			kancollet_timersetting_start.type = 'button';
+			kancollet_timersetting_start.type = 'submit';
 			kancollet_timersetting_start.value = '³«»Ï';
 			kancollet_timersetting_start.disabled = true;
 			kancollet_timersetting_start.setAttribute('onclick','Kancollet.TimerSetting.startTimer()');
