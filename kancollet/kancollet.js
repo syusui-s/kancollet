@@ -1,6 +1,6 @@
 var Kancollet = (function() {
 	var ns = {};
-	var baseurl = '.';
+	var baseurl = location.href.indexOf("http") == 0 ? 'http://syusui-s.github.io/kancollet/' : './';
 	var alarm_basename = baseurl + 'kancollet/alarm';
 
 	//////////////////////////////////
