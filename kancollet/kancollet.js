@@ -401,7 +401,18 @@ var Kancollet = (function() {
 			kancollet.appendChild(kancollet_timers_form);
 			kancollet.appendChild(kancollet_timersetting_form);
 
-			document.head.appendChild(kancollet_stylesheet);
+			var links = document.getElementsByTagName('link');
+			var check_css_exist = false;
+			for(var i=links.length-1; i >= 0; i-=1){
+				if(links[i].href.indexOf('kancollet.css') >= 0){
+					check_css_exist = true;
+					break;
+				}
+			}
+			if(!check_css_exist){
+				document.head.appendChild(kancollet_stylesheet);
+			}
+
 			document.body.appendChild(kancollet);
 
 			var timers_table = new TimersTable();
