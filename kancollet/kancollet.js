@@ -1,11 +1,18 @@
-var Kancollet = (function() {
+/* Kancollet ver 0.12
+ * Author: syusui_s
+ * 
+ * official page: http://syusui-s.github.io/kancollet/
+ */
+/*jslint browser: true, vars: true, white: true */
+var Kancollet = (function () {
+	'use strict';
 	var ns = {};
-	var baseurl = location.href.indexOf("http") == 0 ? 'http://syusui-s.github.io/kancollet/' : './';
+	var baseurl = (location.href.indexOf("http") === 0) ? 'http://syusui-s.github.io/kancollet/' : './';
 	var alarm_basename = baseurl + 'kancollet/alarm';
 
 	//////////////////////////////////
 	// Timer
-	function Timer(name,type,id){
+	function Timer(name, type, id) {
 		this.name	= name;
 		this.type	= type;
 		this.id		= id;
@@ -18,7 +25,7 @@ var Kancollet = (function() {
 	}
 
 	// Instance Methods
-	Timer.prototype.createElement = function(){
+	Timer.prototype.createElement = function () {
 		var td = document.createElement('td');
 		td.className = 'timer';
 		td.id = 'timer'+'-'+this.type+'-'+this.id.toString();
@@ -50,20 +57,20 @@ var Kancollet = (function() {
 		return this.element;
 	};
 
-	Timer.prototype.setTime = function(time){
+	Timer.prototype.setTime = function (time) {
 		this.time = time;
 		this.timer_show.textContent = time;
 		this.changeBGColor('default');
 	};
 
-	Timer.prototype.startTimer = function(){
-		if(!this.timer && this.time){
+	Timer.prototype.startTimer = function () {
+		if (!this.timer && this.time) {
 			var time = Timer.parseTime(this.time);
-			if(!time) return false;
+			if (!time) { return false; }
 			this.enableAlarm();
 			this.changeBGColor('default');
 			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
-			this.timer = setInterval(function(timer){
+			this.timer = setInterval(function (timer) {
 				timer.showTimer();
 			},500,this);
 		}else{
@@ -72,9 +79,9 @@ var Kancollet = (function() {
 		return true;
 	};
 
-	Timer.prototype.stopTimer = function(){
-		if(this.timer){
-			if(this.endtime - Date.now() <= 0){
+	Timer.prototype.stopTimer = function () {
+		if (this.timer) {
+			if (this.endtime - Date.now() <= 0) {
 				this.timer_show.textContent = '　完了　';
 				this.changeBGColor('complete');
 				this.playAlarm();
@@ -90,34 +97,34 @@ var Kancollet = (function() {
 		return true;
 	};
 
-	Timer.prototype.showTimer = function(){
+	Timer.prototype.showTimer = function () {
 		var remain = this.endtime - Date.now();
 		var timestr = Timer.timeToReadableStr(Timer.msToTime(remain));
-		if(remain <= 0){
+		if (remain <= 0) {
 			this.stopTimer();
 			return false;
 		}
 		this.setTime(timestr);
 	};
 
-	Timer.prototype.changeBGColor = function(key){
+	Timer.prototype.changeBGColor = function (key) {
 		var bgcolors = {
 			default: '#ffffff',
 			complete: '#a0f05a'
 		};
-		if(bgcolors[key]){
+		if (bgcolors[key]) {
 			this.element.style.backgroundColor = bgcolors[key];
 		}else{
 			return false;
 		}
 	};
 
-	Timer.prototype.enableAlarm = function(){
+	Timer.prototype.enableAlarm = function () {
 		this.alarm = new Alarm();
 	};
 
-	Timer.prototype.playAlarm = function(){
-		if(this.alarm){
+	Timer.prototype.playAlarm = function () {
+		if (this.alarm) {
 			this.alarm.play();
 		}else{
 			this.enableAlarm();
@@ -126,12 +133,12 @@ var Kancollet = (function() {
 	};
 
 	// Class Methods
-	Timer.parseTime = function(timestr){
-		if(timestr.length < 9){
+	Timer.parseTime = function (timestr) {
+		if (timestr.length < 9 ) {
 			timestr+=':00';
 		}
 		var timearr = (/(\d{2}):(\d{2}):(\d{2})/).exec(timestr);
-		if(!timearr){
+		if (!timearr) {
 			return false;
 		}
 		var time = {};
@@ -141,16 +148,17 @@ var Kancollet = (function() {
 		return time;
 	};
 	
-	Timer.msToTime = function(microsecond){
+	Timer.msToTime = function (microsecond) {
 		var rtn = {};
 		var sec = microsecond/1000;
-		rtn.hour = parseInt(sec/3600);sec = sec%3600;
-		rtn.min  = parseInt(sec/60);sec = sec%60;
-		rtn.sec  = parseInt(sec);
+
+		rtn.hour = parseInt(sec/3600, 10);sec = sec%3600;
+		rtn.min  = parseInt(sec/60, 10);sec = sec%60;
+		rtn.sec  = parseInt(sec, 10);
 		return rtn;
 	};
 
-	Timer.timeToReadableStr = function(time){
+	Timer.timeToReadableStr = function (time) {
 		var rtn = {};
 		rtn.hour = ('00'+time.hour.toString()).slice(-2);
 		rtn.min  = ('00'+time.min.toString()).slice(-2);
@@ -160,7 +168,7 @@ var Kancollet = (function() {
 
 	//////////////////////////////////
 	// Alarm
-	function Alarm(){
+	function Alarm() {
 		this.alarm = new Audio();
 		this.prepare();
 	}
@@ -169,8 +177,8 @@ var Kancollet = (function() {
 	Alarm.VOLUME = 0.9;
 
 	// Instance Methods
-	Alarm.prototype.prepare = function(){
-		if(!(Alarm.playType)){
+	Alarm.prototype.prepare = function () {
+		if (!(Alarm.playType)) {
 			Alarm.setPlayType();
 		}
 		this.alarm.src = alarm_basename + Alarm.PLAYTYPE;
@@ -178,45 +186,47 @@ var Kancollet = (function() {
 		this.alarm.volume = Alarm.VOLUME;
 	};
 
-	Alarm.prototype.play = function(){
+	Alarm.prototype.play = function () {
 		this.alarm.play();
-	}
+	};
 
 	// Class Methods
-	Alarm.canPlayTypes = function(){
+	Alarm.canPlayTypes = function () {
 		var audio = new Audio();
-		var types = new Array();
-		if(audio.canPlayType('audio/ogg') != ''){ types.push('.ogg'); }
-		if(audio.canPlayType('audio/mp3') != ''){ types.push('.mp3'); }
-		if(audio.canPlayType('audio/wav') != ''){ types.push('.wav'); }
+		var types = [];
+		if (audio.canPlayType('audio/ogg') !== '') { types.push('.ogg'); }
+		if (audio.canPlayType('audio/mp3') !== '') { types.push('.mp3'); }
+		if (audio.canPlayType('audio/wav') !== '') { types.push('.wav'); }
 
 		return types;
-	}
+	};
 	
-	Alarm.setPlayType = function(){
+	Alarm.setPlayType = function () {
 		var types = Alarm.canPlayTypes();
-		if(types[0]){
-			Alarm.PLAYTYPE = types[0]
+		if (types[0]) {
+			Alarm.PLAYTYPE = types[0];
 		}else{
 			return false;
 		}
-	}
+	};
 
 	//////////////////////////////////
 	// TimersTable
-	function TimersTable(){
+	function TimersTable () {
 		this.element = null;
 		this.timers = {};
 	}
 
-	TimersTable.prototype.appendElement = function(){
+	TimersTable.prototype.appendElement = function () {
+		var i;
 		var table = document.createElement('table');
 		table.id = 'kancollet-timers-table';
 
 		var types = [ ['expedition','遠征'],['dock','入渠'],['arsenal','建造'] ];
-		for(var i=0;i<types.length;i+=1){
-			var tr = table.insertRow(-1);
-			var th = document.createElement('th');
+		var tr, th;
+		for (i=0; i<types.length; i+=1) {
+			tr = table.insertRow(-1);
+			th = document.createElement('th');
 			th.setAttribute('id',types[i][0]);
 			th.setAttribute('scope','row');
 			th.textContent = types[i][1];
@@ -225,20 +235,22 @@ var Kancollet = (function() {
 		this.element = document.getElementById('kancollet-timers-form').appendChild(table);
 	};
 
-	TimersTable.prototype.addTimer = function(name,type,id){
-		var key   = type+'-'+id.toString();
-		if(!this.timers[key]){
+	TimersTable.prototype.addTimer = function (name, type, id) {
+		var key = type+'-'+id.toString();
+		if (!this.timers[key]) {
+			var i;
 			var timer = new Timer(name,type,id);
-			timer.createElement();
 			var rows = this.element.rows;
 			var tr   = null;
-			for(var i=0;i<rows.length;i+=1){
-				if(rows[i].childNodes[0].id === timer.type){
+
+			for (i=0;i<rows.length;i+=1) {
+				if (rows[i].childNodes[0].id === timer.type) {
 					tr = rows[i];
 					break;
 				}
 			}
-			if(tr){
+			if (tr) {
+				timer.createElement();
 				tr.appendChild(timer.element);
 				this.timers[key] = timer;
 				return true;
@@ -247,33 +259,33 @@ var Kancollet = (function() {
 		return false;
 	};
 
-	TimersTable.prototype.removeTimer = function(type,id){
+	TimersTable.prototype.removeTimer = function (type, id) {
 		var key = type+'-'+id.toString();
 		var timer = this.timers[key];
 
-		if(timer){
+		if (timer) {
 			var parentnode = timer.element.parentNode;
 			parentnode.removeChild(timer.element);
 			delete this.timers[key];
 			return true;
-		}else{
-			return false;
 		}
+
+		return false;
 	};
 
 	//////////////////////////////////
 	// TimerSetting
 	var TimerSetting = {};
 	TimerSetting.target_timer = null;
-	TimerSetting.setTargetTimer = function(obj){
+	TimerSetting.setTargetTimer = function (obj) {
 		var key = ((/timer-(\w+-\d)/).exec(obj.id))[1];
-		this.target_timer = ns.timers_table.timers[key]
-		if(this.target_timer){
+		this.target_timer = ns.timers_table.timers[key];
+		if (this.target_timer) {
 			var timer_adjust = document.getElementById('kancollet-timersetting-time');
 			this.target_timer.changeBGColor('default');
 			timer_adjust.disabled = false;
 
-			if(this.target_timer.time){
+			if (this.target_timer.time) {
 				timer_adjust.value = this.target_timer.time;
 			}else{
 				timer_adjust.value = '00:00:00';
@@ -286,34 +298,34 @@ var Kancollet = (function() {
 		}
 	};
 
-	TimerSetting.settingTimer = function(){
-		if(this.target_timer && !this.target_timer.timer){
+	TimerSetting.settingTimer = function () {
+		if (this.target_timer && !this.target_timer.timer) {
 			var time = document.getElementById('kancollet-timersetting-time').value;
 			this.target_timer.setTime(time);
 		}
 	};
 
-	TimerSetting.startTimer = function(){
-		if(this.target_timer && !this.target_timer.timer){
+	TimerSetting.startTimer = function () {
+		if (this.target_timer && !this.target_timer.timer) {
 			this.settingTimer();
-			if(!this.target_timer.startTimer()){
+			if (!this.target_timer.startTimer()) {
 				window.alert('書式が間違っています。正しい書式で入れなおしてください。');
 			}
 			this.changeButtonEnable();
 		}
 	};
 
-	TimerSetting.stopTimer = function(){
-		if(this.target_timer){
+	TimerSetting.stopTimer = function () {
+		if (this.target_timer) {
 			this.target_timer.stopTimer();
 			this.changeButtonEnable();
 		}
 	};
 
-	TimerSetting.changeButtonEnable = function(){
+	TimerSetting.changeButtonEnable = function () {
 		var start_button = document.getElementById('kancollet-timersetting-start');
 		var stop_button = document.getElementById('kancollet-timersetting-stop');
-		if(this.target_timer.timer){
+		if (this.target_timer.timer) {
 			start_button.disabled = true;
 			stop_button.disabled = false;
 		}else{
@@ -322,12 +334,12 @@ var Kancollet = (function() {
 		}
 	};
 
-	function removeKancollet(){
+	function removeKancollet() {
 		document.body.removeChild(document.getElementById('kancollet'));
 	}
 
-	function createKancollet(){
-		if(!document.getElementById('kancollet')){
+	function createKancollet() {
+		if (!document.getElementById('kancollet')) {
 			var kancollet_stylesheet = document.createElement('link');
 			kancollet_stylesheet.rel = 'stylesheet';
 			kancollet_stylesheet.href = baseurl+'kancollet/kancollet.css';
@@ -403,16 +415,14 @@ var Kancollet = (function() {
 
 			var links = document.getElementsByTagName('link');
 			var check_css_exist = false;
-			for(var i=links.length-1; i >= 0; i-=1){
-				if(links[i].href.indexOf('kancollet.css') >= 0){
+			var i;
+			for (i=links.length-1; i >= 0; i-=1) {
+				if (links[i].href.indexOf('kancollet.css') >= 0) {
 					check_css_exist = true;
 					break;
 				}
 			}
-			if(!check_css_exist){
-				document.head.appendChild(kancollet_stylesheet);
-			}
-
+			if (!check_css_exist) { document.head.appendChild(kancollet_stylesheet); }
 			document.body.appendChild(kancollet);
 
 			var timers_table = new TimersTable();
@@ -431,9 +441,9 @@ var Kancollet = (function() {
 			ns.timers_table = timers_table;
 
 			return true;
-		}else{
-			return false;
 		}
+
+		return false;
 	}
 
 	// namespace
