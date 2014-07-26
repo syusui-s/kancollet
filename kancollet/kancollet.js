@@ -36,14 +36,14 @@ var Kancollet = (function () {
 
 		var timer_show = document.createElement('span');
 		timer_show.className = 'timer-show';
-		timer_show.textContent = '¡¡Ì¤ÀßÄê ';
+		timer_show.textContent = 'ã€€æœªè¨­å®š ';
 
 		var timer_button = document.createElement('span');
 		timer_button.className = 'timer-button';
 		timer_button.setAttribute('onclick','Kancollet.TimerSetting.setTargetTimer(this.parentNode)');
 		var timer_button_img = document.createElement('img');
 		timer_button_img.src = baseurl+'kancollet/img/setting_button.png';
-		timer_button_img.alt = 'ÀßÄê';
+		timer_button_img.alt = 'è¨­å®š';
 		timer_button_img.width  = '14';
 		timer_button_img.height = '14';
 		timer_button.appendChild(timer_button_img);
@@ -82,7 +82,7 @@ var Kancollet = (function () {
 	Timer.prototype.stopTimer = function () {
 		if (this.timer) {
 			if (this.endtime - Date.now() <= 0) {
-				this.timer_show.textContent = '¡¡´°Î»¡¡';
+				this.timer_show.textContent = 'ã€€å®Œäº†ã€€';
 				this.changeBGColor('complete');
 				this.playAlarm();
 			}
@@ -222,7 +222,7 @@ var Kancollet = (function () {
 		var table = document.createElement('table');
 		table.id = 'kancollet-timers-table';
 
-		var types = [ ['expedition','±óÀ¬'],['dock','Æþµô'],['arsenal','·úÂ¤'] ];
+		var types = [ ['expedition','é å¾'],['dock','å…¥æ¸ '],['arsenal','å»ºé€ '] ];
 		var tr, th;
 		for (i=0; i<types.length; i+=1) {
 			tr = table.insertRow(-1);
@@ -309,7 +309,7 @@ var Kancollet = (function () {
 		if (this.target_timer && !this.target_timer.timer) {
 			this.settingTimer();
 			if (!this.target_timer.startTimer()) {
-				window.alert('½ñ¼°¤¬´Ö°ã¤Ã¤Æ¤¤¤Þ¤¹¡£Àµ¤·¤¤½ñ¼°¤ÇÆþ¤ì¤Ê¤ª¤·¤Æ¤¯¤À¤µ¤¤¡£');
+				window.alert('æ›¸å¼ãŒé–“é•ã£ã¦ã„ã¾ã™ã€‚æ­£ã—ã„æ›¸å¼ã§å…¥ã‚ŒãªãŠã—ã¦ãã ã•ã„ã€‚');
 			}
 			this.changeButtonEnable();
 		}
@@ -364,13 +364,13 @@ var Kancollet = (function () {
 			var kancollet_timersetting_start = document.createElement('input');
 			kancollet_timersetting_start.id = 'kancollet-timersetting-start';
 			kancollet_timersetting_start.type = 'submit';
-			kancollet_timersetting_start.value = '³«»Ï';
+			kancollet_timersetting_start.value = 'é–‹å§‹';
 			kancollet_timersetting_start.disabled = true;
 
 			var kancollet_timersetting_stop = document.createElement('input');
 			kancollet_timersetting_stop.id = 'kancollet-timersetting-stop';
 			kancollet_timersetting_stop.type = 'button';
-			kancollet_timersetting_stop.value = 'Ää»ß';
+			kancollet_timersetting_stop.value = 'åœæ­¢';
 			kancollet_timersetting_stop.disabled = true;
 			kancollet_timersetting_stop.setAttribute('onclick','Kancollet.TimerSetting.stopTimer();');
 
@@ -384,7 +384,7 @@ var Kancollet = (function () {
 			/*
 			var kancollet_timersetting_setting = document.createElement('a');
 			kancollet_timersetting_setting.setAttribute('href','#');
-			kancollet_timersetting_setting.textContent = 'ÀßÄê';
+			kancollet_timersetting_setting.textContent = 'è¨­å®š';
 			*/
 
 			var kancollet_timersetting_close = document.createElement('span');
@@ -392,7 +392,7 @@ var Kancollet = (function () {
 			var kancollet_timersetting_closeimg = document.createElement('img');
 			kancollet_timersetting_closeimg.id = 'kancollet-timersetting-closeimg';
 			kancollet_timersetting_closeimg.src = baseurl+'kancollet/img/close_button.png';
-			kancollet_timersetting_closeimg.alt = 'ÊÄ¤¸¤ë';
+			kancollet_timersetting_closeimg.alt = 'é–‰ã˜ã‚‹';
 			kancollet_timersetting_closeimg.width  = '16';
 			kancollet_timersetting_closeimg.height = '16';
 			kancollet_timersetting_close.appendChild(kancollet_timersetting_closeimg);
@@ -428,15 +428,15 @@ var Kancollet = (function () {
 			var timers_table = new TimersTable();
 			timers_table.appendElement();
 
-			timers_table.addTimer('ÂèÆó´ÏÂâ','expedition',1);
-			timers_table.addTimer('Âè»°´ÏÂâ','expedition',2);
-			timers_table.addTimer('Âè»Í´ÏÂâ','expedition',3);
+			timers_table.addTimer('ç¬¬äºŒè‰¦éšŠ','expedition',1);
+			timers_table.addTimer('ç¬¬ä¸‰è‰¦éšŠ','expedition',2);
+			timers_table.addTimer('ç¬¬å››è‰¦éšŠ','expedition',3);
 
-			timers_table.addTimer('¥É¥Ã¥¯1','dock',1);
-			timers_table.addTimer('¥É¥Ã¥¯2','dock',2);
+			timers_table.addTimer('ãƒ‰ãƒƒã‚¯1','dock',1);
+			timers_table.addTimer('ãƒ‰ãƒƒã‚¯2','dock',2);
 
-			timers_table.addTimer('¥É¥Ã¥¯1','arsenal',1);
-			timers_table.addTimer('¥É¥Ã¥¯2','arsenal',2);
+			timers_table.addTimer('ãƒ‰ãƒƒã‚¯1','arsenal',1);
+			timers_table.addTimer('ãƒ‰ãƒƒã‚¯2','arsenal',2);
 
 			ns.timers_table = timers_table;
 
