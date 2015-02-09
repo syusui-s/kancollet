@@ -434,9 +434,13 @@ var Kancollet = (function () {
 
 			timers_table.addTimer('ドック1','dock',1);
 			timers_table.addTimer('ドック2','dock',2);
+			timers_table.addTimer('ドック3','dock',3);
+			timers_table.addTimer('ドック4','dock',4);
 
 			timers_table.addTimer('ドック1','arsenal',1);
 			timers_table.addTimer('ドック2','arsenal',2);
+			timers_table.addTimer('ドック3','arsenal',3);
+			timers_table.addTimer('ドック4','arsenal',4);
 
 			ns.timers_table = timers_table;
 
