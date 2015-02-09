@@ -378,8 +378,8 @@ var Kancollet = (function () {
 			kancollet_timersetting_softwarename.id = 'kancollet-timersetting-softwarename';
 			kancollet_timersetting_softwarename.src = baseurl + 'kancollet/img/kancollet.png';
 			kancollet_timersetting_softwarename.alt = 'Kancollet';
-			kancollet_timersetting_softwarename.width  = '62';
-			kancollet_timersetting_softwarename.height = '11';
+			kancollet_timersetting_softwarename.width  = '78';
+			kancollet_timersetting_softwarename.height = '15';
 
 			/*
 			var kancollet_timersetting_setting = document.createElement('a');
