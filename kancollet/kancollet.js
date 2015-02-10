@@ -13,6 +13,7 @@ var Kancollet = (function () {
 	//////////////////////////////////
 	// Timer
 	function Timer(name, type, id) {
+		this.cookie_key = 'kancollet-timer-'+type+'-'+id.toString();
 		this.name	= name;
 		this.type	= type;
 		this.id		= id;
@@ -61,16 +62,19 @@ var Kancollet = (function () {
 
 	Timer.prototype.saveToCookie = function() {
 		if (this.timer) {
-			var key = 'kancollet-timer-'+this.type+'-'+this.id.toString();
 			var expire = new Date(this.endtime);
-			Cookie.save(key, this.endtime.toString(), expire);
+			Cookie.save(this.cookie_key, this.endtime.toString(), expire);
 		}
+	};
+
+	Timer.prototype.removeFromCookie = function () {
+		if (this.timer) { return; }
+		Cookie.remove(this.cookie_key);
 	};
 
 	Timer.prototype.restoreFromCookie = function() {
 		if (this.timer) { return; }
-		var key = 'kancollet-timer-'+this.type+'-'+this.id.toString();
-		var value = Cookie.restore(key);
+		var value = Cookie.restore(this.cookie_key);
 
 		if (value === '') { return; }
 		var endtime = parseInt(value, 10);
@@ -116,6 +120,7 @@ var Kancollet = (function () {
 			this.timer   = null;
 			this.time = null;
 			this.endtime = null;
+			this.removeFromCookie();
 			TimerSetting.changeButtonEnable();
 		}else{
 			return false;
@@ -249,6 +254,10 @@ var Kancollet = (function () {
 		var pattern = new RegExp("(?:^|.*;\\s*)" + key + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*");
 		var value = document.cookie.replace(pattern, "$1");
 		return value;
+	};
+
+	Cookie.remove = function(key) {
+		document.cookie = key + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
 	};
 
 	//////////////////////////////////
