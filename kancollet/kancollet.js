@@ -54,7 +54,32 @@ var Kancollet = (function () {
 
 		this.element = td;
 		this.timer_show = timer_show;
+
+		this.restoreFromCookie();
 		return this.element;
+	};
+
+	Timer.prototype.saveToCookie = function() {
+		if (this.timer) {
+			var key = 'kancollet-timer-'+this.type+'-'+this.id.toString();
+			var expire = new Date(this.endtime);
+			Cookie.save(key, this.endtime.toString(), expire);
+		}
+	};
+
+	Timer.prototype.restoreFromCookie = function() {
+		if (this.timer) { return; }
+		var key = 'kancollet-timer-'+this.type+'-'+this.id.toString();
+		var value = Cookie.restore(key);
+
+		if (value === '') { return; }
+		var endtime = parseInt(value, 10);
+		var remain = endtime - Date.now();
+		if (remain > 0) {
+			var timestr = Timer.timeToReadableStr(Timer.msToTime(remain));
+			this.setTime(timestr);
+			this.startTimer();
+		}
 	};
 
 	Timer.prototype.setTime = function (time) {
@@ -73,6 +98,7 @@ var Kancollet = (function () {
 			this.timer = setInterval(function (timer) {
 				timer.showTimer();
 			},500,this);
+			this.saveToCookie();
 		}else{
 			return false;
 		}
@@ -169,7 +195,7 @@ var Kancollet = (function () {
 	//////////////////////////////////
 	// Alarm
 	function Alarm() {
-		this.alarm = new Audio();
+		this.alarm = new window.Audio();
 		this.prepare();
 	}
 	
@@ -192,7 +218,7 @@ var Kancollet = (function () {
 
 	// Class Methods
 	Alarm.canPlayTypes = function () {
-		var audio = new Audio();
+		var audio = new window.Audio();
 		var types = [];
 		if (audio.canPlayType('audio/ogg') !== '') { types.push('.ogg'); }
 		if (audio.canPlayType('audio/mp3') !== '') { types.push('.mp3'); }
@@ -208,6 +234,21 @@ var Kancollet = (function () {
 		}else{
 			return false;
 		}
+	};
+
+	//////////////////////////////////
+	// Cookie
+	var Cookie = {};
+	
+	Cookie.save = function (key, value, expire) {
+		var expirestr = expire.toGMTString();
+		document.cookie = key + '=' + value + '; expires=' + expirestr + ';';
+	};
+
+	Cookie.restore = function(key) {
+		var pattern = new RegExp("(?:^|.*;\\s*)" + key + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*");
+		var value = document.cookie.replace(pattern, "$1");
+		return value;
 	};
 
 	//////////////////////////////////
