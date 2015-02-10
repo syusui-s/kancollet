@@ -384,6 +384,62 @@ var Kancollet = (function () {
 		}
 	};
 
+	//////////////////////////////////
+	// Preset
+	var Preset = [
+		{ type: 'expedition', name: '練習航海'             , time: '00:15:00' },
+		{ type: 'expedition', name: '前衛支援任務'         , time: '00:15:00' },
+		{ type: 'expedition', name: '警備任務'             , time: '00:20:00' },
+		{ type: 'expedition', name: '長距離練習航海'       , time: '00:30:00' },
+		{ type: 'expedition', name: '艦隊決戦支援任務'     , time: '00:30:00' },
+		{ type: 'expedition', name: '防空射撃演習'         , time: '00:40:00' },
+		{ type: 'expedition', name: '敵地偵察作戦'         , time: '00:45:00' },
+		{ type: 'expedition', name: '対潜警戒任務'         , time: '00:50:00' },
+		{ type: 'expedition', name: '観艦式予行'           , time: '01:00:00' },
+		{ type: 'expedition', name: '海上護衛任務'         , time: '01:30:00' },
+		{ type: 'expedition', name: '強行偵察任務'         , time: '01:30:00' },
+		{ type: 'expedition', name: '潜水艦哨戒任務'       , time: '02:00:00' },
+		{ type: 'expedition', name: '海外艦との接触'       , time: '02:00:00' },
+		{ type: 'expedition', name: '東京急行'             , time: '02:45:00' },
+		{ type: 'expedition', name: '東京急行(弐)'         , time: '02:55:00' },
+		{ type: 'expedition', name: '観艦式'               , time: '03:00:00' },
+		{ type: 'expedition', name: '艦隊演習'             , time: '03:00:00' },
+		{ type: 'expedition', name: 'タンカー護衛任務'     , time: '04:00:00' },
+		{ type: 'expedition', name: '鼠輸送作戦'           , time: '04:00:00' },
+		{ type: 'expedition', name: '航空戦艦運用演習'     , time: '04:00:00' },
+		{ type: 'expedition', name: 'ボーキサイト輸送任務' , time: '05:00:00' },
+		{ type: 'expedition', name: '航空機輸送作戦'       , time: '05:00:00' },
+		{ type: 'expedition', name: '包囲陸戦隊撤収作戦'   , time: '06:00:00' },
+		{ type: 'expedition', name: '北号作戦'             , time: '06:00:00' },
+		{ type: 'expedition', name: 'MO作戦'               , time: '07:00:00' },
+		{ type: 'expedition', name: '資源輸送任務'         , time: '08:00:00' },
+		{ type: 'expedition', name: '水上機基地建設'       , time: '09:00:00' },
+		{ type: 'expedition', name: '囮機動部隊支援作戦'   , time: '12:00:00' },
+		{ type: 'expedition', name: '艦隊決戦援護作戦'     , time: '15:00:00' },
+		{ type: 'expedition', name: '潜水艦通商破壊作戦'   , time: '20:00:00' },
+		// { type: 'expedition', name: '通商破壊作戦'         , time: '40:00:00' },
+		// { type: 'expedition', name: '敵母港空襲作戦'       , time: '80:00:00' },
+		// { type: 'expedition', name: '西方海域封鎖作戦'     , time: '25:00:00' },
+		// { type: 'expedition', name: '潜水艦派遣演習'       , time: '24:00:00' },
+		// { type: 'expedition', name: '潜水艦派遣作戦'       , time: '48:00:00' },
+		// { type: 'expedition', name: '遠洋練習航海'         , time: '24:00:00' },
+	];
+
+	Preset.createDatalist = function() {
+		var datalist = document.createElement('datalist');
+		datalist.id = 'kancollet-timer-preset';
+
+		for (var i=0; i < this.length; ++i) {
+			var option = document.createElement('option');
+			var type = '遠征';
+			option.value = this[i].time;
+			option.textContent = '[' + type + '] ' + this[i].name;
+			datalist.appendChild(option);
+		}
+
+		return datalist;
+	};
+
 	function removeKancollet() {
 		document.body.removeChild(document.getElementById('kancollet'));
 	}
@@ -409,6 +465,8 @@ var Kancollet = (function () {
 			kancollet_timersetting_time.type = 'time';
 			kancollet_timersetting_time.step = '1';
 			kancollet_timersetting_time.disabled = true;
+			kancollet_timersetting_time.setAttribute('autocomplete', 'on');
+			kancollet_timersetting_time.setAttribute('list', 'kancollet-timer-preset');
 			kancollet_timersetting_time.setAttribute('onchange','Kancollet.TimerSetting.settingTimer();');
 
 			var kancollet_timersetting_start = document.createElement('input');
@@ -452,6 +510,7 @@ var Kancollet = (function () {
 			kancollet_timersetting_cleardiv.appendChild(document.createElement('hr'));
 
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_time);
+			kancollet_timersetting_form.appendChild(Preset.createDatalist());
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_start);
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_stop);
 			kancollet_timersetting_form.appendChild(document.createElement('br'));
