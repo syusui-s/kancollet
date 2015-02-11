@@ -89,7 +89,6 @@ var Kancollet = (function () {
 	Timer.prototype.setTime = function (time) {
 		this.time = time;
 		this.timer_show.textContent = time;
-		this.changeBGColor('default');
 	};
 
 	Timer.prototype.startTimer = function () {
@@ -130,11 +129,11 @@ var Kancollet = (function () {
 
 	Timer.prototype.showTimer = function () {
 		var remain = this.endtime - Date.now();
-		var timestr = Timer.timeToReadableStr(Timer.msToTime(remain));
 		if (remain <= 0) {
 			this.stopTimer();
 			return false;
 		}
+		var timestr = Timer.timeToReadableStr(Timer.msToTime(remain));
 		this.setTime(timestr);
 	};
 
@@ -351,6 +350,7 @@ var Kancollet = (function () {
 	TimerSetting.settingTimer = function () {
 		if (this.target_timer && !this.target_timer.timer) {
 			var time = document.getElementById('kancollet-timersetting-time').value;
+			this.target_timer.changeBGColor('default');
 			this.target_timer.setTime(time);
 		}
 	};
