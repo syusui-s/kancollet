@@ -400,6 +400,7 @@ var Kancollet = (function () {
 		{ type: 'expedition', name: '強行偵察任務'         , time: '01:30:00' },
 		{ type: 'expedition', name: '潜水艦哨戒任務'       , time: '02:00:00' },
 		{ type: 'expedition', name: '海外艦との接触'       , time: '02:00:00' },
+		{ type: 'expedition', name: '北方鼠輸送作戦'       , time: '02:20:00' },
 		{ type: 'expedition', name: '東京急行'             , time: '02:45:00' },
 		{ type: 'expedition', name: '東京急行(弐)'         , time: '02:55:00' },
 		{ type: 'expedition', name: '観艦式'               , time: '03:00:00' },
@@ -417,12 +418,13 @@ var Kancollet = (function () {
 		{ type: 'expedition', name: '囮機動部隊支援作戦'   , time: '12:00:00' },
 		{ type: 'expedition', name: '艦隊決戦援護作戦'     , time: '15:00:00' },
 		{ type: 'expedition', name: '潜水艦通商破壊作戦'   , time: '20:00:00' },
-		// { type: 'expedition', name: '通商破壊作戦'         , time: '40:00:00' },
-		// { type: 'expedition', name: '敵母港空襲作戦'       , time: '80:00:00' },
+		{ type: 'expedition', name: '潜水艦派遣演習'       , time: '23:59:59' },
+		{ type: 'expedition', name: '遠洋練習航海'         , time: '23:59:59' },
 		// { type: 'expedition', name: '西方海域封鎖作戦'     , time: '25:00:00' },
-		// { type: 'expedition', name: '潜水艦派遣演習'       , time: '24:00:00' },
+		// { type: 'expedition', name: '遠洋潜水艦作戦'       , time: '30:00:00' },
+		// { type: 'expedition', name: '通商破壊作戦'         , time: '40:00:00' },
 		// { type: 'expedition', name: '潜水艦派遣作戦'       , time: '48:00:00' },
-		// { type: 'expedition', name: '遠洋練習航海'         , time: '24:00:00' },
+		// { type: 'expedition', name: '敵母港空襲作戦'       , time: '80:00:00' },
 	];
 
 	Preset.createDatalist = function() {
