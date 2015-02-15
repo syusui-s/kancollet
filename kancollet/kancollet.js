@@ -139,18 +139,33 @@ var Kancollet = (function () {
 
 	Timer.prototype.changeBGColor = function (key) {
 		var bgcolors = {
-			default: '#ffffff',
+			default: '',
 			complete: '#a0f05a'
 		};
-		if (bgcolors[key]) {
+		if (bgcolors[key] !== undefined) {
 			this.element.style.backgroundColor = bgcolors[key];
 		}else{
 			return false;
 		}
 	};
 
+	Timer.prototype.changeOpacity = function (key) {
+		var opacities = {
+			default: '',
+			selected: 'selected-timer'
+		};
+		if (opacities[key] !== undefined) {
+			this.element.childNodes[2].id = opacities[key];
+		}else{
+			return false;
+		}
+	};
+
 	Timer.prototype.enableAlarm = function () {
-		this.alarm = new Alarm();
+		if (!this.alarm) {
+			this.alarm = new Alarm();
+		}
+		return this;
 	};
 
 	Timer.prototype.playAlarm = function () {
@@ -304,7 +319,7 @@ var Kancollet = (function () {
 				this.timers[key] = timer;
 				return true;
 			}
-		}
+		22}
 		return false;
 	};
 
@@ -328,23 +343,26 @@ var Kancollet = (function () {
 	TimerSetting.target_timer = null;
 	TimerSetting.setTargetTimer = function (obj) {
 		var key = ((/timer-(\w+-\d)/).exec(obj.id))[1];
-		this.target_timer = ns.timers_table.timers[key];
-		if (this.target_timer) {
-			var timer_adjust = document.getElementById('kancollet-timersetting-time');
-			this.target_timer.changeBGColor('default');
-			timer_adjust.disabled = false;
-
-			if (this.target_timer.time) {
-				timer_adjust.value = this.target_timer.time;
-			}else{
-				timer_adjust.value = '00:00:00';
+		var new_target_timer = ns.timers_table.timers[key];
+		if (new_target_timer) {
+			if (this.target_timer) {
+				this.target_timer.changeOpacity('default');
 			}
-
+			this.target_timer = new_target_timer;
+			this.target_timer.changeOpacity('selected');
+			this.target_timer.changeBGColor('default');
+			
+			var time_input = document.getElementById('kancollet-timersetting-time');
+			time_input.disabled = false;
+			if (this.target_timer.time) {
+				time_input.value = this.target_timer.time;
+			}else{
+				time_input.value = '00:00:00';
+			}
 			this.changeButtonEnable();
+			return true;
 		}
-		else{
-			return false;
-		}
+		return false;
 	};
 
 	TimerSetting.settingTimer = function () {

@@ -2,9 +2,9 @@
  *      syusui_s
  */
 
-#kancollet{
+div#kancollet {
 	width: 800px;
-	overflow:hidden;
+	overflow: hidden;
 	position: fixed;
 	top: 0;
 	left: 50%;
@@ -14,13 +14,13 @@
 	background-color: #ffffff;
 }
 
-#kancollet-timers-form{
+form#kancollet-timers-form {
 	float: left;
 	margin: -2px 0 0 0;
 	background-color: #ffffff;
 }
 
-#kancollet-timers-table th,td{
+table#kancollet-timers-table th, table#kancollet-timers-table td {
 	font-size: 12px;
 	border: 1px #000000 solid;
 	padding: 0 0.25em 0 0.25em;
@@ -28,26 +28,26 @@
 	text-align: right;
 }
 
-#kancollet-timers-table #expedition{
+table#kancollet-timers-table th#expedition {
 	color: #ffffff;
 	background-color: #30adb2;
 }
 
-#kancollet-timers-table #dock{
+table#kancollet-timers-table th#dock {
 	color: #ffffff;
 	background-color: #81c838;
 }
 
-#kancollet-timers-table #arsenal{
+table#kancollet-timers-table th#arsenal {
 	color: #ffffff;
 	background-color: #ff6600;
 }
 
-.timer-show{
+span.timer-show {
 	margin-left: 0.5em;
 }
 
-.timer-button{
+span.timer-button {
 	margin: 0;
 	padding: 0;
 	margin-left: 0.25em;
@@ -55,34 +55,48 @@
 	width: 1em;
 }
 
-.timer-button img{
+span.timer-button > img {
 	margin-bottom: -3px;
+	opacity: 0.4;
 }
-.timer-button img:hover{
+
+span.timer-button#selected-timer > img {
+	opacity: 1.0;
+}
+
+span.timer-button > img:hover {
 	cursor: pointer;
+	opacity: 0.8;
 }
-#kancollet-timersetting-form{
+
+form#kancollet-timersetting-form {
 	text-align: right;
 	float: right;
 	background-color: #ffffff;
 }
 
-#kancollet-timersetting-form *{
+form#kancollet-timersetting-form * {
 	margin-left: 0.25em;
 	margin-right: 0.25em;
 }
-#kancollet-timersetting-time {
+
+input#kancollet-timersetting-time {
 	width: 110px;
 }
-#kancollet-timersetting-softwarename{
+
+img#kancollet-timersetting-softwarename {
 	margin-bottom: -1px;
 }
-#kancollet-timersetting-closeimg{
+
+img#kancollet-timersetting-closeimg {
 	margin-bottom: -3px;
-}
-#kancollet-timersetting-closeimg:hover{
-	cursor: pointer;
+	opacity: 0.8;
 }
 
-.clear{ clear: both; }
-.clear hr{ display: none; }
+img#kancollet-timersetting-closeimg:hover {
+	cursor: pointer;
+	opacity: 1.0;
+}
+
+div.clear { clear: both; }
+div.clear hr { display: none; }
