@@ -1,11 +1,19 @@
-var Kancollet = (function() {
+/* Kancollet ver 0.12
+ * Author: syusui_s
+ * 
+ * official page: http://syusui-s.github.io/kancollet/
+ */
+/*jslint browser: true, vars: true, white: true */
+var Kancollet = (function () {
+	'use strict';
 	var ns = {};
-	var baseurl = 'http://syusui-s.github.io/kancollet/';
+	var baseurl = (location.href.indexOf("http") === 0) ? 'http://syusui-s.github.io/kancollet/' : './';
 	var alarm_basename = baseurl + 'kancollet/alarm';
 
 	//////////////////////////////////
 	// Timer
-	function Timer(name,type,id){
+	function Timer(name, type, id) {
+		this.cookie_key = 'kancollet-timer-'+type+'-'+id.toString();
 		this.name	= name;
 		this.type	= type;
 		this.id		= id;
@@ -18,7 +26,7 @@ var Kancollet = (function() {
 	}
 
 	// Instance Methods
-	Timer.prototype.createElement = function(){
+	Timer.prototype.createElement = function () {
 		var td = document.createElement('td');
 		td.className = 'timer';
 		td.id = 'timer'+'-'+this.type+'-'+this.id.toString();
@@ -29,14 +37,14 @@ var Kancollet = (function() {
 
 		var timer_show = document.createElement('span');
 		timer_show.className = 'timer-show';
-		timer_show.textContent = '��̤���� ';
+		timer_show.textContent = '　未設定 ';
 
 		var timer_button = document.createElement('span');
 		timer_button.className = 'timer-button';
 		timer_button.setAttribute('onclick','Kancollet.TimerSetting.setTargetTimer(this.parentNode)');
 		var timer_button_img = document.createElement('img');
 		timer_button_img.src = baseurl+'kancollet/img/setting_button.png';
-		timer_button_img.alt = '����';
+		timer_button_img.alt = '設定';
 		timer_button_img.width  = '14';
 		timer_button_img.height = '14';
 		timer_button.appendChild(timer_button_img);
@@ -47,35 +55,63 @@ var Kancollet = (function() {
 
 		this.element = td;
 		this.timer_show = timer_show;
+
+		this.restoreFromCookie();
 		return this.element;
 	};
 
-	Timer.prototype.setTime = function(time){
-		this.time = time;
-		this.timer_show.textContent = time;
-		this.changeBGColor('default');
+	Timer.prototype.saveToCookie = function() {
+		if (this.timer) {
+			var expire = new Date(this.endtime);
+			Cookie.save(this.cookie_key, this.endtime.toString(), expire);
+		}
 	};
 
-	Timer.prototype.startTimer = function(){
-		if(!this.timer && this.time){
+	Timer.prototype.removeFromCookie = function () {
+		if (this.timer) { return; }
+		Cookie.remove(this.cookie_key);
+	};
+
+	Timer.prototype.restoreFromCookie = function() {
+		if (this.timer) { return; }
+		var value = Cookie.restore(this.cookie_key);
+
+		if (value === '') { return; }
+		var endtime = parseInt(value, 10);
+		var remain = endtime - Date.now();
+		if (remain > 0) {
+			var timestr = Timer.timeToReadableStr(Timer.msToTime(remain));
+			this.setTime(timestr);
+			this.startTimer();
+		}
+	};
+
+	Timer.prototype.setTime = function (time) {
+		this.time = time;
+		this.timer_show.textContent = time;
+	};
+
+	Timer.prototype.startTimer = function () {
+		if (!this.timer && this.time) {
 			var time = Timer.parseTime(this.time);
-			if(!time) return false;
+			if (!time) { return false; }
 			this.enableAlarm();
 			this.changeBGColor('default');
 			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
-			this.timer = setInterval(function(timer){
+			this.timer = setInterval(function (timer) {
 				timer.showTimer();
 			},500,this);
+			this.saveToCookie();
 		}else{
 			return false;
 		}
 		return true;
 	};
 
-	Timer.prototype.stopTimer = function(){
-		if(this.timer){
-			if(this.endtime - Date.now() <= 0){
-				this.timer_show.textContent = '����λ��';
+	Timer.prototype.stopTimer = function () {
+		if (this.timer) {
+			if (this.endtime - Date.now() <= 0) {
+				this.timer_show.textContent = '　完了　';
 				this.changeBGColor('complete');
 				this.playAlarm();
 			}
@@ -83,6 +119,7 @@ var Kancollet = (function() {
 			this.timer   = null;
 			this.time = null;
 			this.endtime = null;
+			this.removeFromCookie();
 			TimerSetting.changeButtonEnable();
 		}else{
 			return false;
@@ -90,34 +127,34 @@ var Kancollet = (function() {
 		return true;
 	};
 
-	Timer.prototype.showTimer = function(){
+	Timer.prototype.showTimer = function () {
 		var remain = this.endtime - Date.now();
-		var timestr = Timer.timeToReadableStr(Timer.msToTime(remain));
-		if(remain <= 0){
+		if (remain <= 0) {
 			this.stopTimer();
 			return false;
 		}
+		var timestr = Timer.timeToReadableStr(Timer.msToTime(remain));
 		this.setTime(timestr);
 	};
 
-	Timer.prototype.changeBGColor = function(key){
+	Timer.prototype.changeBGColor = function (key) {
 		var bgcolors = {
 			default: '#ffffff',
 			complete: '#a0f05a'
 		};
-		if(bgcolors[key]){
+		if (bgcolors[key]) {
 			this.element.style.backgroundColor = bgcolors[key];
 		}else{
 			return false;
 		}
 	};
 
-	Timer.prototype.enableAlarm = function(){
+	Timer.prototype.enableAlarm = function () {
 		this.alarm = new Alarm();
 	};
 
-	Timer.prototype.playAlarm = function(){
-		if(this.alarm){
+	Timer.prototype.playAlarm = function () {
+		if (this.alarm) {
 			this.alarm.play();
 		}else{
 			this.enableAlarm();
@@ -126,12 +163,12 @@ var Kancollet = (function() {
 	};
 
 	// Class Methods
-	Timer.parseTime = function(timestr){
-		if(timestr.length < 9){
+	Timer.parseTime = function (timestr) {
+		if (timestr.length < 9 ) {
 			timestr+=':00';
 		}
 		var timearr = (/(\d{2}):(\d{2}):(\d{2})/).exec(timestr);
-		if(!timearr){
+		if (!timearr) {
 			return false;
 		}
 		var time = {};
@@ -141,16 +178,17 @@ var Kancollet = (function() {
 		return time;
 	};
 	
-	Timer.msToTime = function(microsecond){
+	Timer.msToTime = function (microsecond) {
 		var rtn = {};
 		var sec = microsecond/1000;
-		rtn.hour = parseInt(sec/3600);sec = sec%3600;
-		rtn.min  = parseInt(sec/60);sec = sec%60;
-		rtn.sec  = parseInt(sec);
+
+		rtn.hour = parseInt(sec/3600, 10);sec = sec%3600;
+		rtn.min  = parseInt(sec/60, 10);sec = sec%60;
+		rtn.sec  = parseInt(sec, 10);
 		return rtn;
 	};
 
-	Timer.timeToReadableStr = function(time){
+	Timer.timeToReadableStr = function (time) {
 		var rtn = {};
 		rtn.hour = ('00'+time.hour.toString()).slice(-2);
 		rtn.min  = ('00'+time.min.toString()).slice(-2);
@@ -160,8 +198,8 @@ var Kancollet = (function() {
 
 	//////////////////////////////////
 	// Alarm
-	function Alarm(){
-		this.alarm = new Audio();
+	function Alarm() {
+		this.alarm = new window.Audio();
 		this.prepare();
 	}
 	
@@ -169,8 +207,8 @@ var Kancollet = (function() {
 	Alarm.VOLUME = 0.9;
 
 	// Instance Methods
-	Alarm.prototype.prepare = function(){
-		if(!(Alarm.playType)){
+	Alarm.prototype.prepare = function () {
+		if (!(Alarm.playType)) {
 			Alarm.setPlayType();
 		}
 		this.alarm.src = alarm_basename + Alarm.PLAYTYPE;
@@ -178,45 +216,66 @@ var Kancollet = (function() {
 		this.alarm.volume = Alarm.VOLUME;
 	};
 
-	Alarm.prototype.play = function(){
+	Alarm.prototype.play = function () {
 		this.alarm.play();
-	}
+	};
 
 	// Class Methods
-	Alarm.canPlayTypes = function(){
-		var audio = new Audio();
-		var types = new Array();
-		if(audio.canPlayType('audio/ogg') != ''){ types.push('.ogg'); }
-		if(audio.canPlayType('audio/mp3') != ''){ types.push('.mp3'); }
-		if(audio.canPlayType('audio/wav') != ''){ types.push('.wav'); }
+	Alarm.canPlayTypes = function () {
+		var audio = new window.Audio();
+		var types = [];
+		if (audio.canPlayType('audio/ogg') !== '') { types.push('.ogg'); }
+		if (audio.canPlayType('audio/mp3') !== '') { types.push('.mp3'); }
+		if (audio.canPlayType('audio/wav') !== '') { types.push('.wav'); }
 
 		return types;
-	}
+	};
 	
-	Alarm.setPlayType = function(){
+	Alarm.setPlayType = function () {
 		var types = Alarm.canPlayTypes();
-		if(types[0]){
-			Alarm.PLAYTYPE = types[0]
+		if (types[0]) {
+			Alarm.PLAYTYPE = types[0];
 		}else{
 			return false;
 		}
-	}
+	};
+
+	//////////////////////////////////
+	// Cookie
+	var Cookie = {};
+	
+	Cookie.save = function (key, value, expire) {
+		var expirestr = expire.toGMTString();
+		document.cookie = key + '=' + value + '; expires=' + expirestr + ';';
+	};
+
+	Cookie.restore = function(key) {
+		var pattern = new RegExp("(?:^|.*;\\s*)" + key + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*");
+		var value = document.cookie.replace(pattern, "$1");
+		return value;
+	};
+
+	Cookie.remove = function(key) {
+		document.cookie = key + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+	};
 
 	//////////////////////////////////
 	// TimersTable
-	function TimersTable(){
+	function TimersTable () {
 		this.element = null;
 		this.timers = {};
 	}
 
-	TimersTable.prototype.appendElement = function(){
+	TimersTable.prototype.appendElement = function () {
+		var i;
 		var table = document.createElement('table');
 		table.id = 'kancollet-timers-table';
 
-		var types = [ ['expedition','����'],['dock','����'],['arsenal','��¤'] ];
-		for(var i=0;i<types.length;i+=1){
-			var tr = table.insertRow(-1);
-			var th = document.createElement('th');
+		var types = [ ['expedition','遠征'],['dock','入渠'],['arsenal','建造'] ];
+		var tr, th;
+		for (i=0; i<types.length; i+=1) {
+			tr = table.insertRow(-1);
+			th = document.createElement('th');
 			th.setAttribute('id',types[i][0]);
 			th.setAttribute('scope','row');
 			th.textContent = types[i][1];
@@ -225,20 +284,22 @@ var Kancollet = (function() {
 		this.element = document.getElementById('kancollet-timers-form').appendChild(table);
 	};
 
-	TimersTable.prototype.addTimer = function(name,type,id){
-		var key   = type+'-'+id.toString();
-		if(!this.timers[key]){
+	TimersTable.prototype.addTimer = function (name, type, id) {
+		var key = type+'-'+id.toString();
+		if (!this.timers[key]) {
+			var i;
 			var timer = new Timer(name,type,id);
-			timer.createElement();
 			var rows = this.element.rows;
 			var tr   = null;
-			for(var i=0;i<rows.length;i+=1){
-				if(rows[i].childNodes[0].id === timer.type){
+
+			for (i=0;i<rows.length;i+=1) {
+				if (rows[i].childNodes[0].id === timer.type) {
 					tr = rows[i];
 					break;
 				}
 			}
-			if(tr){
+			if (tr) {
+				timer.createElement();
 				tr.appendChild(timer.element);
 				this.timers[key] = timer;
 				return true;
@@ -247,33 +308,33 @@ var Kancollet = (function() {
 		return false;
 	};
 
-	TimersTable.prototype.removeTimer = function(type,id){
+	TimersTable.prototype.removeTimer = function (type, id) {
 		var key = type+'-'+id.toString();
 		var timer = this.timers[key];
 
-		if(timer){
+		if (timer) {
 			var parentnode = timer.element.parentNode;
 			parentnode.removeChild(timer.element);
 			delete this.timers[key];
 			return true;
-		}else{
-			return false;
 		}
+
+		return false;
 	};
 
 	//////////////////////////////////
 	// TimerSetting
 	var TimerSetting = {};
 	TimerSetting.target_timer = null;
-	TimerSetting.setTargetTimer = function(obj){
+	TimerSetting.setTargetTimer = function (obj) {
 		var key = ((/timer-(\w+-\d)/).exec(obj.id))[1];
-		this.target_timer = ns.timers_table.timers[key]
-		if(this.target_timer){
+		this.target_timer = ns.timers_table.timers[key];
+		if (this.target_timer) {
 			var timer_adjust = document.getElementById('kancollet-timersetting-time');
 			this.target_timer.changeBGColor('default');
 			timer_adjust.disabled = false;
 
-			if(this.target_timer.time){
+			if (this.target_timer.time) {
 				timer_adjust.value = this.target_timer.time;
 			}else{
 				timer_adjust.value = '00:00:00';
@@ -286,34 +347,35 @@ var Kancollet = (function() {
 		}
 	};
 
-	TimerSetting.settingTimer = function(){
-		if(this.target_timer && !this.target_timer.timer){
+	TimerSetting.settingTimer = function () {
+		if (this.target_timer && !this.target_timer.timer) {
 			var time = document.getElementById('kancollet-timersetting-time').value;
+			this.target_timer.changeBGColor('default');
 			this.target_timer.setTime(time);
 		}
 	};
 
-	TimerSetting.startTimer = function(){
-		if(this.target_timer && !this.target_timer.timer){
+	TimerSetting.startTimer = function () {
+		if (this.target_timer && !this.target_timer.timer) {
 			this.settingTimer();
-			if(!this.target_timer.startTimer()){
-				window.alert('�񼰤��ְ�äƤ��ޤ����������񼰤�����ʤ����Ƥ���������');
+			if (!this.target_timer.startTimer()) {
+				window.alert('書式が間違っています。正しい書式で入れなおしてください。');
 			}
 			this.changeButtonEnable();
 		}
 	};
 
-	TimerSetting.stopTimer = function(){
-		if(this.target_timer){
+	TimerSetting.stopTimer = function () {
+		if (this.target_timer) {
 			this.target_timer.stopTimer();
 			this.changeButtonEnable();
 		}
 	};
 
-	TimerSetting.changeButtonEnable = function(){
+	TimerSetting.changeButtonEnable = function () {
 		var start_button = document.getElementById('kancollet-timersetting-start');
 		var stop_button = document.getElementById('kancollet-timersetting-stop');
-		if(this.target_timer.timer){
+		if (this.target_timer.timer) {
 			start_button.disabled = true;
 			stop_button.disabled = false;
 		}else{
@@ -322,12 +384,70 @@ var Kancollet = (function() {
 		}
 	};
 
-	function removeKancollet(){
+	//////////////////////////////////
+	// Preset
+	var Preset = [
+		{ type: 'expedition', name: '練習航海'             , time: '00:15:00' },
+		{ type: 'expedition', name: '前衛支援任務'         , time: '00:15:00' },
+		{ type: 'expedition', name: '警備任務'             , time: '00:20:00' },
+		{ type: 'expedition', name: '長距離練習航海'       , time: '00:30:00' },
+		{ type: 'expedition', name: '艦隊決戦支援任務'     , time: '00:30:00' },
+		{ type: 'expedition', name: '防空射撃演習'         , time: '00:40:00' },
+		{ type: 'expedition', name: '敵地偵察作戦'         , time: '00:45:00' },
+		{ type: 'expedition', name: '対潜警戒任務'         , time: '00:50:00' },
+		{ type: 'expedition', name: '観艦式予行'           , time: '01:00:00' },
+		{ type: 'expedition', name: '海上護衛任務'         , time: '01:30:00' },
+		{ type: 'expedition', name: '強行偵察任務'         , time: '01:30:00' },
+		{ type: 'expedition', name: '潜水艦哨戒任務'       , time: '02:00:00' },
+		{ type: 'expedition', name: '海外艦との接触'       , time: '02:00:00' },
+		{ type: 'expedition', name: '北方鼠輸送作戦'       , time: '02:20:00' },
+		{ type: 'expedition', name: '東京急行'             , time: '02:45:00' },
+		{ type: 'expedition', name: '東京急行(弐)'         , time: '02:55:00' },
+		{ type: 'expedition', name: '観艦式'               , time: '03:00:00' },
+		{ type: 'expedition', name: '艦隊演習'             , time: '03:00:00' },
+		{ type: 'expedition', name: 'タンカー護衛任務'     , time: '04:00:00' },
+		{ type: 'expedition', name: '鼠輸送作戦'           , time: '04:00:00' },
+		{ type: 'expedition', name: '航空戦艦運用演習'     , time: '04:00:00' },
+		{ type: 'expedition', name: 'ボーキサイト輸送任務' , time: '05:00:00' },
+		{ type: 'expedition', name: '航空機輸送作戦'       , time: '05:00:00' },
+		{ type: 'expedition', name: '包囲陸戦隊撤収作戦'   , time: '06:00:00' },
+		{ type: 'expedition', name: '北号作戦'             , time: '06:00:00' },
+		{ type: 'expedition', name: 'MO作戦'               , time: '07:00:00' },
+		{ type: 'expedition', name: '資源輸送任務'         , time: '08:00:00' },
+		{ type: 'expedition', name: '水上機基地建設'       , time: '09:00:00' },
+		{ type: 'expedition', name: '囮機動部隊支援作戦'   , time: '12:00:00' },
+		{ type: 'expedition', name: '艦隊決戦援護作戦'     , time: '15:00:00' },
+		{ type: 'expedition', name: '潜水艦通商破壊作戦'   , time: '20:00:00' },
+		{ type: 'expedition', name: '潜水艦派遣演習'       , time: '23:59:59' },
+		{ type: 'expedition', name: '遠洋練習航海'         , time: '23:59:59' },
+		// { type: 'expedition', name: '西方海域封鎖作戦'     , time: '25:00:00' },
+		// { type: 'expedition', name: '遠洋潜水艦作戦'       , time: '30:00:00' },
+		// { type: 'expedition', name: '通商破壊作戦'         , time: '40:00:00' },
+		// { type: 'expedition', name: '潜水艦派遣作戦'       , time: '48:00:00' },
+		// { type: 'expedition', name: '敵母港空襲作戦'       , time: '80:00:00' },
+	];
+
+	Preset.createDatalist = function() {
+		var datalist = document.createElement('datalist');
+		datalist.id = 'kancollet-timer-preset';
+
+		for (var i=0; i < this.length; ++i) {
+			var option = document.createElement('option');
+			var type = '遠征';
+			option.value = this[i].time;
+			option.textContent = '[' + type + '] ' + this[i].name;
+			datalist.appendChild(option);
+		}
+
+		return datalist;
+	};
+
+	function removeKancollet() {
 		document.body.removeChild(document.getElementById('kancollet'));
 	}
 
-	function createKancollet(){
-		if(!document.getElementById('kancollet')){
+	function createKancollet() {
+		if (!document.getElementById('kancollet')) {
 			var kancollet_stylesheet = document.createElement('link');
 			kancollet_stylesheet.rel = 'stylesheet';
 			kancollet_stylesheet.href = baseurl+'kancollet/kancollet.css';
@@ -340,39 +460,41 @@ var Kancollet = (function() {
 
 			var kancollet_timersetting_form = document.createElement('form');
 			kancollet_timersetting_form.id = 'kancollet-timersetting-form';
+			kancollet_timersetting_form.setAttribute('onsubmit','Kancollet.TimerSetting.startTimer();return false;');
 			
 			var kancollet_timersetting_time = document.createElement('input');
 			kancollet_timersetting_time.id = 'kancollet-timersetting-time';
 			kancollet_timersetting_time.type = 'time';
 			kancollet_timersetting_time.step = '1';
 			kancollet_timersetting_time.disabled = true;
-			kancollet_timersetting_time.setAttribute('onchange','Kancollet.TimerSetting.settingTimer()');
+			kancollet_timersetting_time.setAttribute('autocomplete', 'on');
+			kancollet_timersetting_time.setAttribute('list', 'kancollet-timer-preset');
+			kancollet_timersetting_time.setAttribute('onchange','Kancollet.TimerSetting.settingTimer();');
 
 			var kancollet_timersetting_start = document.createElement('input');
 			kancollet_timersetting_start.id = 'kancollet-timersetting-start';
 			kancollet_timersetting_start.type = 'submit';
-			kancollet_timersetting_start.value = '����';
+			kancollet_timersetting_start.value = '開始';
 			kancollet_timersetting_start.disabled = true;
-			kancollet_timersetting_start.setAttribute('onclick','Kancollet.TimerSetting.startTimer()');
 
 			var kancollet_timersetting_stop = document.createElement('input');
 			kancollet_timersetting_stop.id = 'kancollet-timersetting-stop';
 			kancollet_timersetting_stop.type = 'button';
-			kancollet_timersetting_stop.value = '���';
+			kancollet_timersetting_stop.value = '停止';
 			kancollet_timersetting_stop.disabled = true;
-			kancollet_timersetting_stop.setAttribute('onclick','Kancollet.TimerSetting.stopTimer()');
+			kancollet_timersetting_stop.setAttribute('onclick','Kancollet.TimerSetting.stopTimer();');
 
 			var kancollet_timersetting_softwarename = document.createElement('img');
 			kancollet_timersetting_softwarename.id = 'kancollet-timersetting-softwarename';
 			kancollet_timersetting_softwarename.src = baseurl + 'kancollet/img/kancollet.png';
 			kancollet_timersetting_softwarename.alt = 'Kancollet';
-			kancollet_timersetting_softwarename.width  = '62';
-			kancollet_timersetting_softwarename.height = '11';
+			kancollet_timersetting_softwarename.width  = '78';
+			kancollet_timersetting_softwarename.height = '15';
 
 			/*
 			var kancollet_timersetting_setting = document.createElement('a');
 			kancollet_timersetting_setting.setAttribute('href','#');
-			kancollet_timersetting_setting.textContent = '����';
+			kancollet_timersetting_setting.textContent = '設定';
 			*/
 
 			var kancollet_timersetting_close = document.createElement('span');
@@ -380,7 +502,7 @@ var Kancollet = (function() {
 			var kancollet_timersetting_closeimg = document.createElement('img');
 			kancollet_timersetting_closeimg.id = 'kancollet-timersetting-closeimg';
 			kancollet_timersetting_closeimg.src = baseurl+'kancollet/img/close_button.png';
-			kancollet_timersetting_closeimg.alt = '�Ĥ���';
+			kancollet_timersetting_closeimg.alt = '閉じる';
 			kancollet_timersetting_closeimg.width  = '16';
 			kancollet_timersetting_closeimg.height = '16';
 			kancollet_timersetting_close.appendChild(kancollet_timersetting_closeimg);
@@ -390,6 +512,7 @@ var Kancollet = (function() {
 			kancollet_timersetting_cleardiv.appendChild(document.createElement('hr'));
 
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_time);
+			kancollet_timersetting_form.appendChild(Preset.createDatalist());
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_start);
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_stop);
 			kancollet_timersetting_form.appendChild(document.createElement('br'));
@@ -401,28 +524,41 @@ var Kancollet = (function() {
 			kancollet.appendChild(kancollet_timers_form);
 			kancollet.appendChild(kancollet_timersetting_form);
 
-			document.head.appendChild(kancollet_stylesheet);
+			var links = document.getElementsByTagName('link');
+			var check_css_exist = false;
+			var i;
+			for (i=links.length-1; i >= 0; i-=1) {
+				if (links[i].href.indexOf('kancollet.css') >= 0) {
+					check_css_exist = true;
+					break;
+				}
+			}
+			if (!check_css_exist) { document.head.appendChild(kancollet_stylesheet); }
 			document.body.appendChild(kancollet);
 
 			var timers_table = new TimersTable();
 			timers_table.appendElement();
 
-			timers_table.addTimer('�������','expedition',1);
-			timers_table.addTimer('�軰����','expedition',2);
-			timers_table.addTimer('��ʹ���','expedition',3);
+			timers_table.addTimer('第二艦隊','expedition',1);
+			timers_table.addTimer('第三艦隊','expedition',2);
+			timers_table.addTimer('第四艦隊','expedition',3);
 
-			timers_table.addTimer('�ɥå�1','dock',1);
-			timers_table.addTimer('�ɥå�2','dock',2);
+			timers_table.addTimer('ドック1','dock',1);
+			timers_table.addTimer('ドック2','dock',2);
+			timers_table.addTimer('ドック3','dock',3);
+			timers_table.addTimer('ドック4','dock',4);
 
-			timers_table.addTimer('�ɥå�1','arsenal',1);
-			timers_table.addTimer('�ɥå�2','arsenal',2);
+			timers_table.addTimer('ドック1','arsenal',1);
+			timers_table.addTimer('ドック2','arsenal',2);
+			timers_table.addTimer('ドック3','arsenal',3);
+			timers_table.addTimer('ドック4','arsenal',4);
 
 			ns.timers_table = timers_table;
 
 			return true;
-		}else{
-			return false;
 		}
+
+		return false;
 	}
 
 	// namespace
