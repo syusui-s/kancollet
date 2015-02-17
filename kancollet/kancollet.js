@@ -115,15 +115,20 @@ var Kancollet = (function () {
 				this.changeBGColor('complete');
 				this.playAlarm();
 			}
-			clearInterval(this.timer);
-			this.timer   = null;
-			this.time = null;
-			this.endtime = null;
+			this.clearTimer();
 			this.removeFromCookie();
 			TimerSetting.changeButtonEnable();
 		}else{
 			return false;
 		}
+		return true;
+	};
+
+	Timer.prototype.clearTimer = function() {
+		clearInterval(this.timer);
+		this.timer   = null;
+		this.time    = null;
+		this.endtime = null;
 		return true;
 	};
 
@@ -166,6 +171,11 @@ var Kancollet = (function () {
 			this.alarm = new Alarm();
 		}
 		return this;
+	};
+
+	Timer.prototype.disableAlarm = function () {
+		this.alarm = null;
+		return true;
 	};
 
 	Timer.prototype.playAlarm = function () {
@@ -280,6 +290,15 @@ var Kancollet = (function () {
 		this.element = null;
 		this.timers = {};
 	}
+	
+	TimersTable.prototype.remove = function() {
+		var timer_keys = Object.keys(this.timers);
+		for (var i=0; i < timer_keys.length; ++i) {
+			var timer = this.timers[timer_keys[i]];
+			timer.clearTimer();
+			timer.disableAlarm();
+		}
+	};
 
 	TimersTable.prototype.appendElement = function () {
 		var i;
@@ -319,7 +338,7 @@ var Kancollet = (function () {
 				this.timers[key] = timer;
 				return true;
 			}
-		22}
+		}
 		return false;
 	};
 
@@ -461,6 +480,7 @@ var Kancollet = (function () {
 	};
 
 	function removeKancollet() {
+		this.timers_table.remove();
 		document.body.removeChild(document.getElementById('kancollet'));
 	}
 
