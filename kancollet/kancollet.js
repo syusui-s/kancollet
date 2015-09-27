@@ -92,7 +92,7 @@ var Kancollet = (function () {
 	};
 
 	Timer.prototype.isElapsed = function() {
-		return (this.endtime - Date.now() <= 0);
+		return this.timer && (this.endtime - Date.now() <= 0);
 	};
 
 	Timer.prototype.startTimer = function () {
@@ -101,7 +101,7 @@ var Kancollet = (function () {
 			if (!time) { return false; }
 			this.enableAlarm();
 			this.changeBGColor('default');
-			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
+			this.endtime = Date.now() + (time.hour * 3600 + time.min * 60 + time.sec)*1000;
 			this.timer = setInterval(function (timer) {
 				timer.showTimer();
 			},500,this);
@@ -114,13 +114,13 @@ var Kancollet = (function () {
 
 	Timer.prototype.stopTimer = function () {
 		if (this.timer) {
-			this.clearTimer();
-			this.removeFromCookie();
-			if (this.isElapsed) {
+			if (this.isElapsed()) {
 				this.timer_show.textContent = '　完了　';
 				this.changeBGColor('complete');
 				this.notification();
 			}
+			this.clearTimer();
+			this.removeFromCookie();
 			TimerSetting.changeButtonEnable();
 		}else{
 			return false;
