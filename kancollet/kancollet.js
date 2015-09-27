@@ -18,6 +18,7 @@ var Kancollet = (function () {
 		this.type	= type;
 		this.id		= id;
 		this.time	= null;
+		this.last_time = null;
 		this.element = null;
 		this.endtime = null;
 		this.timer   = null;
@@ -105,6 +106,7 @@ var Kancollet = (function () {
 			this.timer = setInterval(function (timer) {
 				timer.showTimer();
 			},500,this);
+			this.last_time = this.time
 			this.saveToCookie();
 		}else{
 			return false;
@@ -130,8 +132,8 @@ var Kancollet = (function () {
 
 	Timer.prototype.clearTimer = function() {
 		clearInterval(this.timer);
+		this.time    = this.last_time;
 		this.timer   = null;
-		this.time    = null;
 		this.endtime = null;
 		return true;
 	};
