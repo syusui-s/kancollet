@@ -7,7 +7,7 @@
 var Kancollet = (function () {
 	'use strict';
 	var ns = {};
-	var baseurl = (location.href.indexOf("http") === 0) ? 'http://syusui-s.github.io/kancollet/' : './';
+	var baseurl = (location.href.match(/^https?:\/\/(?!localhost|127\.0\.0\.1)/)) ? 'https://syusui-s.github.io/kancollet/' : './';
 	var alarm_basename = baseurl + 'kancollet/alarm';
 
 	//////////////////////////////////
@@ -91,6 +91,10 @@ var Kancollet = (function () {
 		this.timer_show.textContent = time;
 	};
 
+	Timer.prototype.isElapsed = function() {
+		return (this.endtime - Date.now() <= 0);
+	};
+
 	Timer.prototype.startTimer = function () {
 		if (!this.timer && this.time) {
 			var time = Timer.parseTime(this.time);
@@ -110,13 +114,13 @@ var Kancollet = (function () {
 
 	Timer.prototype.stopTimer = function () {
 		if (this.timer) {
-			if (this.endtime - Date.now() <= 0) {
-				this.timer_show.textContent = '　完了　';
-				this.changeBGColor('complete');
-				this.playAlarm();
-			}
 			this.clearTimer();
 			this.removeFromCookie();
+			if (this.isElapsed) {
+				this.timer_show.textContent = '　完了　';
+				this.changeBGColor('complete');
+				this.notification();
+			}
 			TimerSetting.changeButtonEnable();
 		}else{
 			return false;
@@ -176,6 +180,29 @@ var Kancollet = (function () {
 	Timer.prototype.disableAlarm = function () {
 		this.alarm = null;
 		return true;
+	};
+
+	Timer.prototype.notification = function () {
+		this.showNotification();
+		this.playAlarm();
+	};
+
+	Timer.prototype.showNotification = function () {
+		if (! window.Notification) { return false; }
+		if (Notification.permission !== 'granted') {
+			Notification.requestPermission();
+		}
+		if (! window.document.hasFocus()) {
+			var notification = new Notification('Kancollet', {
+				lang: 'ja-JP',
+				body: '「' + this.name + '」が完了しました',
+				icon: (baseurl + 'kancollet/img/kancollet_icon.png')
+			});
+			notification.onclick = function() {
+				notification.close();
+				window.focus();
+			};
+		}
 	};
 
 	Timer.prototype.playAlarm = function () {
