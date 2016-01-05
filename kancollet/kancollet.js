@@ -1,6 +1,6 @@
 /* Kancollet ver 0.12
  * Author: syusui_s
- * 
+ *
  * official page: http://syusui-s.github.io/kancollet/
  */
 /*jslint browser: true, vars: true, white: true */
@@ -453,45 +453,45 @@ var Kancollet = (function () {
 	//////////////////////////////////
 	// Preset
 	var Preset = [
-		{ type: 'expedition', name: '練習航海'             , time: '00:15:00' },
-		{ type: 'expedition', name: '前衛支援任務'         , time: '00:15:00' },
-		{ type: 'expedition', name: '警備任務'             , time: '00:20:00' },
-		{ type: 'expedition', name: '長距離練習航海'       , time: '00:30:00' },
-		{ type: 'expedition', name: '艦隊決戦支援任務'     , time: '00:30:00' },
-		{ type: 'expedition', name: '防空射撃演習'         , time: '00:40:00' },
-		{ type: 'expedition', name: '敵地偵察作戦'         , time: '00:45:00' },
-		{ type: 'expedition', name: '対潜警戒任務'         , time: '00:50:00' },
-		{ type: 'expedition', name: '観艦式予行'           , time: '01:00:00' },
-		{ type: 'expedition', name: '海上護衛任務'         , time: '01:30:00' },
-		{ type: 'expedition', name: '強行偵察任務'         , time: '01:30:00' },
-		{ type: 'expedition', name: '潜水艦哨戒任務'       , time: '02:00:00' },
-		{ type: 'expedition', name: '海外艦との接触'       , time: '02:00:00' },
-		{ type: 'expedition', name: '北方鼠輸送作戦'       , time: '02:20:00' },
-		{ type: 'expedition', name: '東京急行'             , time: '02:45:00' },
-		{ type: 'expedition', name: '東京急行(弐)'         , time: '02:55:00' },
-		{ type: 'expedition', name: '観艦式'               , time: '03:00:00' },
-		{ type: 'expedition', name: '艦隊演習'             , time: '03:00:00' },
-		{ type: 'expedition', name: 'タンカー護衛任務'     , time: '04:00:00' },
-		{ type: 'expedition', name: '鼠輸送作戦'           , time: '04:00:00' },
-		{ type: 'expedition', name: '航空戦艦運用演習'     , time: '04:00:00' },
-		{ type: 'expedition', name: 'ボーキサイト輸送任務' , time: '05:00:00' },
-		{ type: 'expedition', name: '航空機輸送作戦'       , time: '05:00:00' },
-		{ type: 'expedition', name: '包囲陸戦隊撤収作戦'   , time: '06:00:00' },
-		{ type: 'expedition', name: '北号作戦'             , time: '06:00:00' },
-		{ type: 'expedition', name: 'MO作戦'               , time: '07:00:00' },
-		{ type: 'expedition', name: '資源輸送任務'         , time: '08:00:00' },
-		{ type: 'expedition', name: '水上機基地建設'       , time: '09:00:00' },
-		{ type: 'expedition', name: '囮機動部隊支援作戦'   , time: '12:00:00' },
-		{ type: 'expedition', name: '艦隊決戦援護作戦'     , time: '15:00:00' },
-		{ type: 'expedition', name: '潜水艦通商破壊作戦'   , time: '20:00:00' },
-		{ type: 'expedition', name: '潜水艦派遣演習'       , time: '23:59:59' },
-		{ type: 'expedition', name: '遠洋練習航海'         , time: '23:59:59' },
-		// { type: 'expedition', name: '西方海域封鎖作戦'     , time: '25:00:00' },
-		// { type: 'expedition', name: '遠洋潜水艦作戦'       , time: '30:00:00' },
-		// { type: 'expedition', name: '通商破壊作戦'         , time: '40:00:00' },
-		// { type: 'expedition', name: '潜水艦派遣作戦'       , time: '48:00:00' },
-		// { type: 'expedition', name: '敵母港空襲作戦'       , time: '80:00:00' },
-	];
+		{ id:  1, type: 'expedition', name: '練習航海',             time: '00:15:00' },
+		{ id:  2, type: 'expedition', name: '長距離練習航海',       time: '00:30:00' },
+		{ id:  3, type: 'expedition', name: '警備任務',             time: '00:20:00' },
+		{ id:  4, type: 'expedition', name: '対潜警戒任務',         time: '00:50:00' },
+		{ id:  5, type: 'expedition', name: '海上護衛任務',         time: '01:30:00' },
+		{ id:  6, type: 'expedition', name: '防空射撃演習',         time: '00:40:00' },
+		{ id:  7, type: 'expedition', name: '観艦式予行',           time: '01:00:00' },
+		{ id:  8, type: 'expedition', name: '観艦式',               time: '03:00:00' },
+		{ id:  9, type: 'expedition', name: 'タンカー護衛任務',     time: '04:00:00' },
+		{ id: 10, type: 'expedition', name: '強行偵察任務',         time: '01:30:00' },
+		{ id: 11, type: 'expedition', name: 'ボーキサイト輸送任務', time: '05:00:00' },
+		{ id: 12, type: 'expedition', name: '資源輸送任務',         time: '08:00:00' },
+		{ id: 13, type: 'expedition', name: '鼠輸送作戦',           time: '04:00:00' },
+		{ id: 14, type: 'expedition', name: '包囲陸戦隊撤収作戦',   time: '06:00:00' },
+		{ id: 15, type: 'expedition', name: '囮機動部隊支援作戦',   time: '12:00:00' },
+		{ id: 16, type: 'expedition', name: '艦隊決戦援護作戦',     time: '15:00:00' },
+		{ id: 17, type: 'expedition', name: '敵地偵察作戦',         time: '00:45:00' },
+		{ id: 18, type: 'expedition', name: '航空機輸送作戦',       time: '05:00:00' },
+		{ id: 19, type: 'expedition', name: '北号作戦',             time: '06:00:00' },
+		{ id: 20, type: 'expedition', name: '潜水艦哨戒任務',       time: '02:00:00' },
+		{ id: 21, type: 'expedition', name: '北方鼠輸送作戦',       time: '02:20:00' },
+		{ id: 22, type: 'expedition', name: '艦隊演習',             time: '03:00:00' },
+		{ id: 23, type: 'expedition', name: '航空戦艦運用演習',     time: '04:00:00' },
+		{ id: 24, type: 'expedition', name: '北方航路海上護衛',     time: '08:20:00' },
+		// { id: 25, type: 'expedition', name: '通商破壊作戦',         time: '40:00:00' },
+		// { id: 26, type: 'expedition', name: '敵母港空襲作戦',       time: '80:00:00' },
+		{ id: 27, type: 'expedition', name: '潜水艦通商破壊作戦',   time: '20:00:00' },
+		// { id: 28, type: 'expedition', name: '西方海域封鎖作戦',     time: '25:00:00' },
+		{ id: 29, type: 'expedition', name: '潜水艦派遣演習',       time: '23:59:59' },
+		// { id: 30, type: 'expedition', name: '潜水艦派遣作戦',       time: '48:00:00' },
+		{ id: 31, type: 'expedition', name: '海外艦との接触',       time: '02:00:00' },
+		{ id: 32, type: 'expedition', name: '遠洋練習航海',         time: '23:59:59' },
+		{ id: 35, type: 'expedition', name: 'MO作戦',               time: '07:00:00' },
+		{ id: 36, type: 'expedition', name: '水上機基地建設',       time: '09:00:00' },
+		{ id: 37, type: 'expedition', name: '東京急行',             time: '02:45:00' },
+		{ id: 38, type: 'expedition', name: '東京急行（弐）',       time: '02:55:00' },
+		// { id: 39, type: 'expedition', name: '遠洋潜水艦作戦',       time: '30:00:00' },
+		{ id: 40, type: 'expedition', name: '水上機前線輸送',       time: '06:50:00' }
+	].sort(function(a, b){ return a.time > b.time ? 1 : -1; });
 
 	Preset.createDatalist = function() {
 		var datalist = document.createElement('datalist');
