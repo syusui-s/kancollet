@@ -9,9 +9,13 @@ div#kancollet {
 	top: 0;
 	left: 50%;
 	right: 50%;
-	margin: 1px -400px 0 -400px;
-	padding: 0 0.5em 0 0.5em;
+	margin: 0px -400px 0 -400px;
+	padding: 3px 0.5em 2px 0.5em;
 	background-color: #ffffff;
+	font-size: 16px;
+	color: #222;
+	border: 1px #CCC solid;
+	border-top: none;
 }
 
 form#kancollet-timers-form {
@@ -22,10 +26,11 @@ form#kancollet-timers-form {
 
 table#kancollet-timers-table th, table#kancollet-timers-table td {
 	font-size: 12px;
-	border: 1px #000000 solid;
+	border: 1px #666 solid;
 	padding: 0 0.25em 0 0.25em;
 	margin: 0;
 	text-align: right;
+	height: 16px;
 }
 
 table#kancollet-timers-table th#expedition {
@@ -48,16 +53,17 @@ span.timer-show {
 }
 
 span.timer-button {
+	display: inline-block;
 	margin: 0;
 	padding: 0;
 	margin-left: 0.25em;
-	height: 1em;
-	width: 1em;
+	height: 16px;
+	width: 16px;
 }
 
 span.timer-button > img {
 	margin-bottom: -3px;
-	opacity: 0.4;
+	opacity: 0.6;
 }
 
 span.timer-button#selected-timer > img {
@@ -66,7 +72,7 @@ span.timer-button#selected-timer > img {
 
 span.timer-button > img:hover {
 	cursor: pointer;
-	opacity: 0.8;
+	opacity: 0.9;
 }
 
 form#kancollet-timersetting-form {
@@ -77,7 +83,6 @@ form#kancollet-timersetting-form {
 
 form#kancollet-timersetting-form * {
 	margin-left: 0.25em;
-	margin-right: 0.25em;
 }
 
 input#kancollet-timersetting-time {
