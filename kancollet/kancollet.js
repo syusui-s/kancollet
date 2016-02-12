@@ -42,7 +42,8 @@ var Kancollet = (function () {
 
 		var timer_button = document.createElement('span');
 		timer_button.className = 'timer-button';
-		timer_button.setAttribute('onclick','Kancollet.TimerSetting.setTargetTimer(this.parentNode)');
+		timer_button.addEventListener('click', function(){ Kancollet.TimerSetting.setTargetTimer(this.parentNode); });
+
 		var timer_button_img = document.createElement('img');
 		timer_button_img.src = baseurl+'kancollet/img/setting_button.png';
 		timer_button_img.alt = '設定';
@@ -200,10 +201,10 @@ var Kancollet = (function () {
 				body: '「' + this.name + '」が完了しました',
 				icon: (baseurl + 'kancollet/img/kancollet_icon.png')
 			});
-			notification.onclick = function() {
+			notification.addEventListener('click',function() {
 				notification.close();
 				window.focus();
-			};
+			});
 		}
 	};
 
@@ -417,7 +418,7 @@ var Kancollet = (function () {
 		if (this.target_timer && !this.target_timer.timer) {
 			var time = document.getElementById('kancollet-timersetting-time').value;
 			this.target_timer.changeBGColor('default');
-			this.target_timer.setTime(time);
+			this.target_timer.setTime(time.length > 0 ? time : ' 未設定 ');
 		}
 	};
 
@@ -527,7 +528,10 @@ var Kancollet = (function () {
 
 			var kancollet_timersetting_form = document.createElement('form');
 			kancollet_timersetting_form.id = 'kancollet-timersetting-form';
-			kancollet_timersetting_form.setAttribute('onsubmit','Kancollet.TimerSetting.startTimer();return false;');
+			kancollet_timersetting_form.addEventListener('submit', function(ev) {
+				Kancollet.TimerSetting.startTimer();
+				ev.preventDefault();
+			});
 			
 			var kancollet_timersetting_time = document.createElement('input');
 			kancollet_timersetting_time.id = 'kancollet-timersetting-time';
@@ -536,7 +540,7 @@ var Kancollet = (function () {
 			kancollet_timersetting_time.disabled = true;
 			kancollet_timersetting_time.setAttribute('autocomplete', 'on');
 			kancollet_timersetting_time.setAttribute('list', 'kancollet-timer-preset');
-			kancollet_timersetting_time.setAttribute('onchange','Kancollet.TimerSetting.settingTimer();');
+			kancollet_timersetting_time.addEventListener('change', function() { Kancollet.TimerSetting.settingTimer() });
 
 			var kancollet_timersetting_start = document.createElement('input');
 			kancollet_timersetting_start.id = 'kancollet-timersetting-start';
@@ -549,7 +553,7 @@ var Kancollet = (function () {
 			kancollet_timersetting_stop.type = 'button';
 			kancollet_timersetting_stop.value = '停止';
 			kancollet_timersetting_stop.disabled = true;
-			kancollet_timersetting_stop.setAttribute('onclick','Kancollet.TimerSetting.stopTimer();');
+			kancollet_timersetting_stop.addEventListener('click', function() { Kancollet.TimerSetting.stopTimer(); } );
 
 			var kancollet_timersetting_softwarename = document.createElement('img');
 			kancollet_timersetting_softwarename.id = 'kancollet-timersetting-softwarename';
@@ -565,7 +569,7 @@ var Kancollet = (function () {
 			*/
 
 			var kancollet_timersetting_close = document.createElement('span');
-			kancollet_timersetting_close.setAttribute('onclick','Kancollet.remove()');
+			kancollet_timersetting_close.addEventListener('click', function() { Kancollet.remove(); } );
 			var kancollet_timersetting_closeimg = document.createElement('img');
 			kancollet_timersetting_closeimg.id = 'kancollet-timersetting-closeimg';
 			kancollet_timersetting_closeimg.src = baseurl+'kancollet/img/close_button.png';

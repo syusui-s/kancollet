@@ -14,7 +14,7 @@ div#kancollet {
 	background-color: #ffffff;
 	font-size: 16px;
 	color: #222;
-	border: 1px #CCC solid;
+	border: 1px #999 solid;
 	border-top: none;
 }
 
@@ -46,6 +46,16 @@ table#kancollet-timers-table th#dock {
 table#kancollet-timers-table th#arsenal {
 	color: #ffffff;
 	background-color: #ff6600;
+}
+
+span.timer-name {
+	display: inline-block;
+	float: left;
+	width: 4em;
+}
+
+span.timer-name:after {
+	clear: left;
 }
 
 span.timer-show {
