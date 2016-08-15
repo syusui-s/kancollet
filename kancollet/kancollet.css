@@ -10,7 +10,7 @@ div#kancollet {
 	left: 50%;
 	right: 50%;
 	margin: 0px -400px 0 -400px;
-	padding: 3px 0.5em 2px 0.5em;
+	padding: 3px 8px 2px 8px;
 	background-color: #ffffff;
 	font-size: 16px;
 	color: #222;
@@ -18,16 +18,20 @@ div#kancollet {
 	border-top: none;
 }
 
+div#kancollet input[type="button"], div#kancollet input[type="submit"] {
+	padding: 1px 6px;
+}
+
 form#kancollet-timers-form {
 	float: left;
 	margin: -2px 0 0 0;
 	background-color: #ffffff;
+	font-size: 12px;
 }
 
 table#kancollet-timers-table th, table#kancollet-timers-table td {
-	font-size: 12px;
 	border: 1px #666 solid;
-	padding: 0 0.25em 0 0.25em;
+	padding: 0 2px 0 2px;
 	margin: 0;
 	text-align: right;
 	height: 16px;
@@ -50,37 +54,39 @@ table#kancollet-timers-table th#arsenal {
 
 span.timer-name {
 	display: inline-block;
-	float: left;
-	width: 4em;
-}
-
-span.timer-name:after {
-	clear: left;
+	width: 50px;
 }
 
 span.timer-show {
-	margin-left: 0.5em;
+	display: inline-block;
+	width: 65px;
+	text-align: center;
 }
 
-span.timer-button {
+button.timer-button {
 	display: inline-block;
+	background: transparent;
+	border: none;
 	margin: 0;
 	padding: 0;
-	margin-left: 0.25em;
 	height: 16px;
 	width: 16px;
 }
 
-span.timer-button > img {
-	margin-bottom: -3px;
+button.timer-button > img {
 	opacity: 0.6;
+	margin: 0;
+	padding: 0;
+	height: 14px;
+	width: 14px;
+	margin-bottom: -3px;
 }
 
-span.timer-button#selected-timer > img {
+button.timer-button#selected-timer > img {
 	opacity: 1.0;
 }
 
-span.timer-button > img:hover {
+button.timer-button > img:hover {
 	cursor: pointer;
 	opacity: 0.9;
 }
@@ -92,7 +98,7 @@ form#kancollet-timersetting-form {
 }
 
 form#kancollet-timersetting-form * {
-	margin-left: 0.25em;
+	margin-left: 2px;
 }
 
 input#kancollet-timersetting-time {

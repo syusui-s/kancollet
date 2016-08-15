@@ -40,9 +40,9 @@ var Kancollet = (function () {
 		timer_show.className = 'timer-show';
 		timer_show.textContent = '　未設定 ';
 
-		var timer_button = document.createElement('span');
+		var timer_button = document.createElement('button');
 		timer_button.className = 'timer-button';
-		timer_button.addEventListener('click', function(){ Kancollet.TimerSetting.setTargetTimer(this.parentNode); });
+		timer_button.addEventListener('click', function(ev){ Kancollet.TimerSetting.setTargetTimer(this.parentNode); ev.preventDefault(); });
 
 		var timer_button_img = document.createElement('img');
 		timer_button_img.src = baseurl+'kancollet/img/setting_button.png';
@@ -409,6 +409,7 @@ var Kancollet = (function () {
 				time_input.value = '00:00:00';
 			}
 			this.changeButtonEnable();
+			time_input.focus();
 			return true;
 		}
 		return false;
@@ -418,7 +419,7 @@ var Kancollet = (function () {
 		if (this.target_timer && !this.target_timer.timer) {
 			var time = document.getElementById('kancollet-timersetting-time').value;
 			this.target_timer.changeBGColor('default');
-			this.target_timer.setTime(time.length > 0 ? time : ' 未設定 ');
+			this.target_timer.setTime(time.length > 0 ? time : '未設定 ');
 		}
 	};
 
