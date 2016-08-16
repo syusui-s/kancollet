@@ -59,27 +59,24 @@ span.timer-name {
 
 span.timer-show {
 	display: inline-block;
-	width: 65px;
+	width: 60px;
 	text-align: center;
 }
 
 button.timer-button {
-	display: inline-block;
 	background: transparent;
 	border: none;
 	margin: 0;
 	padding: 0;
-	height: 16px;
 	width: 16px;
+	height: 16px;
+	text-align: center;
 }
 
 button.timer-button > img {
 	opacity: 0.6;
-	margin: 0;
-	padding: 0;
-	height: 14px;
-	width: 14px;
-	margin-bottom: -3px;
+	vertical-align: middle;
+	margin-bottom: 2px;
 }
 
 button.timer-button#selected-timer > img {
