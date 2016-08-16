@@ -1,0 +1,30 @@
+lang: "ja"
+title: "Kancollet"
+short-description: >
+    艦これの遠征・入渠・建造の終了を教えてくれるタイマー
+email: "syusui.s@gmail.com"
+description: > # this means to ignore newlines until "baseurl:"
+    「艦隊これくしょん -艦これ-」の遠征・入渠・建造の終了を教えてくれるタイマーです。
+    使い方は簡単、Kancolletをブックマークに登録するだけです。
+    ブラウザ上で動作しますので、面倒なダウンロードやインストールは必要ありません。
+    ブックマークレットとして実装されています。
+baseurl: "/kancollet" # the subpath of your site, e.g. /blog
+url: "https://syusui-s.github.io/kancollet" # the base hostname & protocol for your site
+twitter_username: syusui_s
+github_username:  syusui-s
+
+# Build settings
+markdown: kramdown
+
+exclude: ['vendor/']
+
+links:
+    - title: "News"
+      url: "https://github.com/syusui-s/kancollet/releases"
+    - title: "Wiki"
+      url: "https://github.com/syusui-s/kancollet/wiki"
+    - title: "View on Github"
+      url: "https://github.com/syusui-s/kancollet/"
+
+kancollet-code: "javascript:(function(){if(document.getElementById('kancollet_script')){Kancollet.create();}else{var e=document.createElement('script');e.setAttribute('language','javascript');e.id='kancollet_script';e.type='text/javascript';e.setAttribute('src','http://syusui-s.github.io/kancollet/kancollet-master/kancollet/kancollet.js');e.setAttribute('charset','UTF-8');document.head.appendChild(e);}}());"
+

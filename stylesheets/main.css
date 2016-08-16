@@ -1,0 +1,160 @@
+---
+---
+
+* { padding: 0; margin: 0; }
+
+html {
+	background-color: #fff;
+}
+
+body {
+	font-size: 16px;
+	color: #3B3B3B;
+	width: 860px;
+	margin: auto;
+	padding: 32px 64px;
+	box-sizing: content-box;
+	box-shadow: #999 0 0 10px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: bold;
+}
+
+h1 { font-size: 32px; margin-bottom: 16px; }
+h2 { font-size: 24px; }
+h3 { font-size: 19px; }
+h4 { font-size: inherit; }
+
+ul, ol {
+	margin-left: 20px;
+}
+
+p, ul, ol {
+	margin-top: 10px;
+	margin-bottom: 16px;
+}
+
+header#page-header {
+	margin-bottom: 24px;
+}
+
+header#page-header div#banner {
+	display: block;
+	padding-left: 96px;
+	background-image: url({{"/images/icon.png" | prepend: site.baseurl }});
+	background-repeat: no-repeat;
+	background-size: 72px;
+}
+
+header#page-header h1 {
+	font-size: 48px;
+	margin: 0;
+	padding: 0;
+}
+
+header#page-header h1 > a {
+	color: #3B3B3B;
+	text-decoration: none;
+}
+
+header#page-header h1 > a:hover {
+	color: #5A5A5A;
+}
+
+header#page-header p#short-description {
+	padding: 0;
+	margin-top: -16px;;
+	font-size: 21px;
+}
+
+nav#site-nav {
+}
+
+nav#site-nav ul {
+	display: table;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	table-layout: fixed;
+	text-align: center;
+	height: 16px;
+}
+
+nav#site-nav li {
+	display: table-cell;
+	background-color: #fff;
+	border: 1px solid #999;
+	border-left: none;
+	vertical-align: middle;
+}
+
+nav#site-nav li:first-child {
+	border-left: 1px solid #999;
+}
+
+nav#site-nav a {
+	display: inline-block;
+	width: 100%;
+	color: #555;
+}
+nav#site-nav li:hover a {
+	color: #111;
+}
+
+nav#site-nav ul > li {
+	display: table-cell;
+}
+
+footer#page-footer {
+	width: 100%;
+	text-align: center;
+	border-top: 1px solid #3B3B3B;
+}
+
+div.big-centered {
+	margin: auto;
+	text-align: center;
+	font-size: 17px;
+	width: 520px;
+}
+
+img#screenshot {
+	display: block;
+	box-shadow: #999 0 0px 5px -1px;
+	margin: auto;
+}
+
+div#add-bookmark {
+	position: relative;
+	margin: auto;
+	height: 42px;
+}
+
+a#bookmarklet {
+	display: inline-block;
+	height: 42px;
+	width: 281px;
+	background: url({{"/images/start_kancollet.png" | prepend: site.baseurl }}) no-repeat;
+	border: 1px dashed transparent;
+	border-radius: 6px 6px;
+	color: transparent;
+	text-decoration: none;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+a#bookmarklet:hover {
+	border: 1px dashed #474747;
+}
+
+a#bookmarklet:hover:after {
+	content: "";
+	display: block;
+	height: 320px;
+	width: 235px;
+	margin: 0;
+	padding: 0;
+	margin-top: -349px;
+	background: url({{"/images/drag_to_bookmarkbar.png" | prepend: site.baseurl }}) no-repeat;
+}

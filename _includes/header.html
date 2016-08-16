@@ -1,0 +1,24 @@
+<header id="page-header">
+	<div id="banner">
+		<h1><a href="{{ site.baseurl }}/">{{ site.title | escape }}</a></h1>
+		<p id="short-description">{{ site.short-description }}</p>
+	</div>
+
+	<nav id="site-nav">
+		<ul>
+		{% assign pages = site.pages | sort: "weight" %}
+		{% for jekyll_page in pages %}
+		{% if jekyll_page.title %}
+		<li>
+			<a href="{{ jekyll_page.url | prepend: site.baseurl }}">{{ jekyll_page.title | escape }}</a>
+		</li>
+		{% endif %}
+		{% endfor %}
+		{% for extlink in site.links %}
+		<li>
+			<a href="{{ extlink["url"] }}">{{ extlink["title"] | escape }}</a>
+		</li>
+		{% endfor %}
+		</ul>
+	</nav>
+</header>

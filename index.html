@@ -1,0 +1,61 @@
+---
+layout: page
+---
+<p>
+<img id="screenshot" src="{{ "/images/screenshot.png" | prepend: site.baseurl }}" width="820px" alt="Kancolletのスクリーンショットをこの文章の位置に掲載しています。">
+</p>
+
+<div class="big-centered">
+<p>
+Kancolletは「艦隊これくしょん -艦これ-」の
+遠征・入渠・建造の終了を教えてくれるタイマーです。
+</p>
+
+<div id="add-bookmark">
+<script>
+window.addEventListener("load", function() {
+	document.querySelector("a#bookmarklet").addEventListener("click", function(ev) {
+		window.alert("ブックマークバーにドラッグするか、リンクをコピーしてブックマークに登録してください。");
+		ev.preventDefault();
+	});
+});
+</script>
+	<noscript>
+		<p>ご利用のブラウザは、Javascriptに対応していません。Kancolletの実行には、Javascriptに対応したブラウザがが必要です。</p>
+	</noscript>
+	<p>
+		<a id="bookmarklet"  href="{{ site.kancollet-code }}">
+			<span>Kancollet<span>
+		</a>
+	</p>
+</div>
+
+<p>
+ブラウザのブックマークに追加するだけで、インストールできます。
+すぐに使い始めることができます。
+</p>
+
+</div>
+
+<h2>使い方</h2>
+<p>
+ブックマークにKancolletを追加しましょう。追加するには、次のいずれか方法を試してください。
+</p>
+
+<ul>
+	<li>上のボタンをブックマークにドラック＆ドロップする。</li>
+	<li><a href="{{ site.kancollet-code }}">リンクアドレス</a>をコピーして、ブックマークを作成する。リンクアドレスはURL欄に設定します。</li>
+</ul>
+
+<p>
+追加し終わったら、
+</p>
+
+<ol>
+<li><a href="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/">艦隊これくしょん</a>を開きます。</li>
+<li>ブックマークに追加したKancolletをクリックします。</li>
+<li>上部にKancolletのウィンドウが開きます。</li>
+<li>設定したいタイマーの設定ボタン<img src="">を押して、右の入力欄から時間をセットします。</li>
+<li>「開始」を押し、タイマーを始動させます。</li>
+<li>時間が来たら、表示は「完了」に変わります。</li>
+</ol>

@@ -1,0 +1,3 @@
+[submodule "kancollet-master"]
+	path = kancollet-master
+	url = https://github.com/syusui-s/kancollet.git
