@@ -7,7 +7,7 @@
 var Kancollet = (function () {
 	'use strict';
 	var ns = {};
-	var baseurl = (location.href.match(/^https?:\/\/(?!localhost|127\.0\.0\.1)/)) ? 'https://syusui-s.github.io/kancollet/' : './';
+	var baseurl = (location.href.match(/^https?:\/\/(?!localhost|127\.0\.0\.1)/)) ? 'https://syusui-s.github.io/kancollet/kancollet-master/' : './';
 	var alarm_basename = baseurl + 'kancollet/alarm';
 
 	//////////////////////////////////
