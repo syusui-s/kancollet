@@ -4,6 +4,6 @@
   <title>{% if page.title %}{{ page.title | escape }} - {{ site.title | escape }}{% else %}{{ site.title | escape }}：{{ site.short-description | escape }}{% endif %}</title>
   <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
 
-  <link rel="shortcut icon" type="image/png" href="{{ "/images/icon.png" | prepend: site.baseurl }}">
+  <link rel="shortcut icon" type="image/png" href="{{ "/images/icon_square.png" | prepend: site.baseurl }}">
   <link rel="stylesheet" type="text/css" media="screen" href="{{ "/stylesheets/main.css" | prepend: site.baseurl }}">
 </head>
