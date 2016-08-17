@@ -1,13 +1,13 @@
 /* Kancollet ver 0.12
  * Author: syusui_s
- * 
+ *
  * official page: http://syusui-s.github.io/kancollet/
  */
 /*jslint browser: true, vars: true, white: true */
 var Kancollet = (function () {
 	'use strict';
 	var ns = {};
-	var baseurl = (location.href.indexOf("http") === 0) ? 'http://syusui-s.github.io/kancollet/' : './';
+	var baseurl = (location.href.match(/^https?:\/\/(?!localhost|127\.0\.0\.1)/)) ? 'https://syusui-s.github.io/kancollet/kancollet-master/' : './';
 	var alarm_basename = baseurl + 'kancollet/alarm';
 
 	//////////////////////////////////
@@ -18,6 +18,7 @@ var Kancollet = (function () {
 		this.type	= type;
 		this.id		= id;
 		this.time	= null;
+		this.last_time = null;
 		this.element = null;
 		this.endtime = null;
 		this.timer   = null;
@@ -39,9 +40,10 @@ var Kancollet = (function () {
 		timer_show.className = 'timer-show';
 		timer_show.textContent = '　未設定 ';
 
-		var timer_button = document.createElement('span');
+		var timer_button = document.createElement('button');
 		timer_button.className = 'timer-button';
-		timer_button.setAttribute('onclick','Kancollet.TimerSetting.setTargetTimer(this.parentNode)');
+		timer_button.addEventListener('click', function(ev){ Kancollet.TimerSetting.setTargetTimer(this.parentNode); ev.preventDefault(); });
+
 		var timer_button_img = document.createElement('img');
 		timer_button_img.src = baseurl+'kancollet/img/setting_button.png';
 		timer_button_img.alt = '設定';
@@ -91,16 +93,21 @@ var Kancollet = (function () {
 		this.timer_show.textContent = time;
 	};
 
+	Timer.prototype.isElapsed = function() {
+		return this.timer && (this.endtime - Date.now() <= 0);
+	};
+
 	Timer.prototype.startTimer = function () {
 		if (!this.timer && this.time) {
 			var time = Timer.parseTime(this.time);
 			if (!time) { return false; }
 			this.enableAlarm();
 			this.changeBGColor('default');
-			this.endtime = Date.now() + (time.hour*3600+time.min*60+time.sec)*1000;
+			this.endtime = Date.now() + (time.hour * 3600 + time.min * 60 + time.sec)*1000;
 			this.timer = setInterval(function (timer) {
 				timer.showTimer();
 			},500,this);
+			this.last_time = this.time
 			this.saveToCookie();
 		}else{
 			return false;
@@ -110,20 +117,25 @@ var Kancollet = (function () {
 
 	Timer.prototype.stopTimer = function () {
 		if (this.timer) {
-			if (this.endtime - Date.now() <= 0) {
+			if (this.isElapsed()) {
 				this.timer_show.textContent = '　完了　';
 				this.changeBGColor('complete');
-				this.playAlarm();
+				this.notification();
 			}
-			clearInterval(this.timer);
-			this.timer   = null;
-			this.time = null;
-			this.endtime = null;
+			this.clearTimer();
 			this.removeFromCookie();
 			TimerSetting.changeButtonEnable();
 		}else{
 			return false;
 		}
+		return true;
+	};
+
+	Timer.prototype.clearTimer = function() {
+		clearInterval(this.timer);
+		this.time    = this.last_time;
+		this.timer   = null;
+		this.endtime = null;
 		return true;
 	};
 
@@ -139,18 +151,61 @@ var Kancollet = (function () {
 
 	Timer.prototype.changeBGColor = function (key) {
 		var bgcolors = {
-			default: '#ffffff',
+			default: '',
 			complete: '#a0f05a'
 		};
-		if (bgcolors[key]) {
+		if (bgcolors[key] !== undefined) {
 			this.element.style.backgroundColor = bgcolors[key];
 		}else{
 			return false;
 		}
 	};
 
+	Timer.prototype.changeOpacity = function (key) {
+		var opacities = {
+			default: '',
+			selected: 'selected-timer'
+		};
+		if (opacities[key] !== undefined) {
+			this.element.childNodes[2].id = opacities[key];
+		}else{
+			return false;
+		}
+	};
+
 	Timer.prototype.enableAlarm = function () {
-		this.alarm = new Alarm();
+		if (!this.alarm) {
+			this.alarm = new Alarm();
+		}
+		return this;
+	};
+
+	Timer.prototype.disableAlarm = function () {
+		this.alarm = null;
+		return true;
+	};
+
+	Timer.prototype.notification = function () {
+		this.showNotification();
+		this.playAlarm();
+	};
+
+	Timer.prototype.showNotification = function () {
+		if (! window.Notification) { return false; }
+		if (Notification.permission !== 'granted') {
+			Notification.requestPermission();
+		}
+		if (! window.document.hasFocus()) {
+			var notification = new Notification('Kancollet', {
+				lang: 'ja-JP',
+				body: '「' + this.name + '」が完了しました',
+				icon: (baseurl + 'kancollet/img/kancollet_icon.png')
+			});
+			notification.addEventListener('click',function() {
+				notification.close();
+				window.focus();
+			});
+		}
 	};
 
 	Timer.prototype.playAlarm = function () {
@@ -265,6 +320,15 @@ var Kancollet = (function () {
 		this.element = null;
 		this.timers = {};
 	}
+	
+	TimersTable.prototype.remove = function() {
+		var timer_keys = Object.keys(this.timers);
+		for (var i=0; i < timer_keys.length; ++i) {
+			var timer = this.timers[timer_keys[i]];
+			timer.clearTimer();
+			timer.disableAlarm();
+		}
+	};
 
 	TimersTable.prototype.appendElement = function () {
 		var i;
@@ -328,30 +392,34 @@ var Kancollet = (function () {
 	TimerSetting.target_timer = null;
 	TimerSetting.setTargetTimer = function (obj) {
 		var key = ((/timer-(\w+-\d)/).exec(obj.id))[1];
-		this.target_timer = ns.timers_table.timers[key];
-		if (this.target_timer) {
-			var timer_adjust = document.getElementById('kancollet-timersetting-time');
-			this.target_timer.changeBGColor('default');
-			timer_adjust.disabled = false;
-
-			if (this.target_timer.time) {
-				timer_adjust.value = this.target_timer.time;
-			}else{
-				timer_adjust.value = '00:00:00';
+		var new_target_timer = ns.timers_table.timers[key];
+		if (new_target_timer) {
+			if (this.target_timer) {
+				this.target_timer.changeOpacity('default');
 			}
-
+			this.target_timer = new_target_timer;
+			this.target_timer.changeOpacity('selected');
+			this.target_timer.changeBGColor('default');
+			
+			var time_input = document.getElementById('kancollet-timersetting-time');
+			time_input.disabled = false;
+			if (this.target_timer.time) {
+				time_input.value = this.target_timer.time;
+			}else{
+				time_input.value = '00:00:00';
+			}
 			this.changeButtonEnable();
+			time_input.focus();
+			return true;
 		}
-		else{
-			return false;
-		}
+		return false;
 	};
 
 	TimerSetting.settingTimer = function () {
 		if (this.target_timer && !this.target_timer.timer) {
 			var time = document.getElementById('kancollet-timersetting-time').value;
 			this.target_timer.changeBGColor('default');
-			this.target_timer.setTime(time);
+			this.target_timer.setTime(time.length > 0 ? time : '未設定 ');
 		}
 	};
 
@@ -387,45 +455,45 @@ var Kancollet = (function () {
 	//////////////////////////////////
 	// Preset
 	var Preset = [
-		{ type: 'expedition', name: '練習航海'             , time: '00:15:00' },
-		{ type: 'expedition', name: '前衛支援任務'         , time: '00:15:00' },
-		{ type: 'expedition', name: '警備任務'             , time: '00:20:00' },
-		{ type: 'expedition', name: '長距離練習航海'       , time: '00:30:00' },
-		{ type: 'expedition', name: '艦隊決戦支援任務'     , time: '00:30:00' },
-		{ type: 'expedition', name: '防空射撃演習'         , time: '00:40:00' },
-		{ type: 'expedition', name: '敵地偵察作戦'         , time: '00:45:00' },
-		{ type: 'expedition', name: '対潜警戒任務'         , time: '00:50:00' },
-		{ type: 'expedition', name: '観艦式予行'           , time: '01:00:00' },
-		{ type: 'expedition', name: '海上護衛任務'         , time: '01:30:00' },
-		{ type: 'expedition', name: '強行偵察任務'         , time: '01:30:00' },
-		{ type: 'expedition', name: '潜水艦哨戒任務'       , time: '02:00:00' },
-		{ type: 'expedition', name: '海外艦との接触'       , time: '02:00:00' },
-		{ type: 'expedition', name: '北方鼠輸送作戦'       , time: '02:20:00' },
-		{ type: 'expedition', name: '東京急行'             , time: '02:45:00' },
-		{ type: 'expedition', name: '東京急行(弐)'         , time: '02:55:00' },
-		{ type: 'expedition', name: '観艦式'               , time: '03:00:00' },
-		{ type: 'expedition', name: '艦隊演習'             , time: '03:00:00' },
-		{ type: 'expedition', name: 'タンカー護衛任務'     , time: '04:00:00' },
-		{ type: 'expedition', name: '鼠輸送作戦'           , time: '04:00:00' },
-		{ type: 'expedition', name: '航空戦艦運用演習'     , time: '04:00:00' },
-		{ type: 'expedition', name: 'ボーキサイト輸送任務' , time: '05:00:00' },
-		{ type: 'expedition', name: '航空機輸送作戦'       , time: '05:00:00' },
-		{ type: 'expedition', name: '包囲陸戦隊撤収作戦'   , time: '06:00:00' },
-		{ type: 'expedition', name: '北号作戦'             , time: '06:00:00' },
-		{ type: 'expedition', name: 'MO作戦'               , time: '07:00:00' },
-		{ type: 'expedition', name: '資源輸送任務'         , time: '08:00:00' },
-		{ type: 'expedition', name: '水上機基地建設'       , time: '09:00:00' },
-		{ type: 'expedition', name: '囮機動部隊支援作戦'   , time: '12:00:00' },
-		{ type: 'expedition', name: '艦隊決戦援護作戦'     , time: '15:00:00' },
-		{ type: 'expedition', name: '潜水艦通商破壊作戦'   , time: '20:00:00' },
-		{ type: 'expedition', name: '潜水艦派遣演習'       , time: '23:59:59' },
-		{ type: 'expedition', name: '遠洋練習航海'         , time: '23:59:59' },
-		// { type: 'expedition', name: '西方海域封鎖作戦'     , time: '25:00:00' },
-		// { type: 'expedition', name: '遠洋潜水艦作戦'       , time: '30:00:00' },
-		// { type: 'expedition', name: '通商破壊作戦'         , time: '40:00:00' },
-		// { type: 'expedition', name: '潜水艦派遣作戦'       , time: '48:00:00' },
-		// { type: 'expedition', name: '敵母港空襲作戦'       , time: '80:00:00' },
-	];
+		{ id:  1, type: 'expedition', name: '練習航海',             time: '00:15:00' },
+		{ id:  2, type: 'expedition', name: '長距離練習航海',       time: '00:30:00' },
+		{ id:  3, type: 'expedition', name: '警備任務',             time: '00:20:00' },
+		{ id:  4, type: 'expedition', name: '対潜警戒任務',         time: '00:50:00' },
+		{ id:  5, type: 'expedition', name: '海上護衛任務',         time: '01:30:00' },
+		{ id:  6, type: 'expedition', name: '防空射撃演習',         time: '00:40:00' },
+		{ id:  7, type: 'expedition', name: '観艦式予行',           time: '01:00:00' },
+		{ id:  8, type: 'expedition', name: '観艦式',               time: '03:00:00' },
+		{ id:  9, type: 'expedition', name: 'タンカー護衛任務',     time: '04:00:00' },
+		{ id: 10, type: 'expedition', name: '強行偵察任務',         time: '01:30:00' },
+		{ id: 11, type: 'expedition', name: 'ボーキサイト輸送任務', time: '05:00:00' },
+		{ id: 12, type: 'expedition', name: '資源輸送任務',         time: '08:00:00' },
+		{ id: 13, type: 'expedition', name: '鼠輸送作戦',           time: '04:00:00' },
+		{ id: 14, type: 'expedition', name: '包囲陸戦隊撤収作戦',   time: '06:00:00' },
+		{ id: 15, type: 'expedition', name: '囮機動部隊支援作戦',   time: '12:00:00' },
+		{ id: 16, type: 'expedition', name: '艦隊決戦援護作戦',     time: '15:00:00' },
+		{ id: 17, type: 'expedition', name: '敵地偵察作戦',         time: '00:45:00' },
+		{ id: 18, type: 'expedition', name: '航空機輸送作戦',       time: '05:00:00' },
+		{ id: 19, type: 'expedition', name: '北号作戦',             time: '06:00:00' },
+		{ id: 20, type: 'expedition', name: '潜水艦哨戒任務',       time: '02:00:00' },
+		{ id: 21, type: 'expedition', name: '北方鼠輸送作戦',       time: '02:20:00' },
+		{ id: 22, type: 'expedition', name: '艦隊演習',             time: '03:00:00' },
+		{ id: 23, type: 'expedition', name: '航空戦艦運用演習',     time: '04:00:00' },
+		{ id: 24, type: 'expedition', name: '北方航路海上護衛',     time: '08:20:00' },
+		// { id: 25, type: 'expedition', name: '通商破壊作戦',         time: '40:00:00' },
+		// { id: 26, type: 'expedition', name: '敵母港空襲作戦',       time: '80:00:00' },
+		{ id: 27, type: 'expedition', name: '潜水艦通商破壊作戦',   time: '20:00:00' },
+		// { id: 28, type: 'expedition', name: '西方海域封鎖作戦',     time: '25:00:00' },
+		{ id: 29, type: 'expedition', name: '潜水艦派遣演習',       time: '23:59:59' },
+		// { id: 30, type: 'expedition', name: '潜水艦派遣作戦',       time: '48:00:00' },
+		{ id: 31, type: 'expedition', name: '海外艦との接触',       time: '02:00:00' },
+		{ id: 32, type: 'expedition', name: '遠洋練習航海',         time: '23:59:59' },
+		{ id: 35, type: 'expedition', name: 'MO作戦',               time: '07:00:00' },
+		{ id: 36, type: 'expedition', name: '水上機基地建設',       time: '09:00:00' },
+		{ id: 37, type: 'expedition', name: '東京急行',             time: '02:45:00' },
+		{ id: 38, type: 'expedition', name: '東京急行（弐）',       time: '02:55:00' },
+		// { id: 39, type: 'expedition', name: '遠洋潜水艦作戦',       time: '30:00:00' },
+		{ id: 40, type: 'expedition', name: '水上機前線輸送',       time: '06:50:00' }
+	].sort(function(a, b){ return a.time > b.time ? 1 : -1; });
 
 	Preset.createDatalist = function() {
 		var datalist = document.createElement('datalist');
@@ -443,6 +511,7 @@ var Kancollet = (function () {
 	};
 
 	function removeKancollet() {
+		this.timers_table.remove();
 		document.body.removeChild(document.getElementById('kancollet'));
 	}
 
@@ -460,7 +529,10 @@ var Kancollet = (function () {
 
 			var kancollet_timersetting_form = document.createElement('form');
 			kancollet_timersetting_form.id = 'kancollet-timersetting-form';
-			kancollet_timersetting_form.setAttribute('onsubmit','Kancollet.TimerSetting.startTimer();return false;');
+			kancollet_timersetting_form.addEventListener('submit', function(ev) {
+				Kancollet.TimerSetting.startTimer();
+				ev.preventDefault();
+			});
 			
 			var kancollet_timersetting_time = document.createElement('input');
 			kancollet_timersetting_time.id = 'kancollet-timersetting-time';
@@ -469,7 +541,7 @@ var Kancollet = (function () {
 			kancollet_timersetting_time.disabled = true;
 			kancollet_timersetting_time.setAttribute('autocomplete', 'on');
 			kancollet_timersetting_time.setAttribute('list', 'kancollet-timer-preset');
-			kancollet_timersetting_time.setAttribute('onchange','Kancollet.TimerSetting.settingTimer();');
+			kancollet_timersetting_time.addEventListener('change', function() { Kancollet.TimerSetting.settingTimer() });
 
 			var kancollet_timersetting_start = document.createElement('input');
 			kancollet_timersetting_start.id = 'kancollet-timersetting-start';
@@ -482,7 +554,7 @@ var Kancollet = (function () {
 			kancollet_timersetting_stop.type = 'button';
 			kancollet_timersetting_stop.value = '停止';
 			kancollet_timersetting_stop.disabled = true;
-			kancollet_timersetting_stop.setAttribute('onclick','Kancollet.TimerSetting.stopTimer();');
+			kancollet_timersetting_stop.addEventListener('click', function() { Kancollet.TimerSetting.stopTimer(); } );
 
 			var kancollet_timersetting_softwarename = document.createElement('img');
 			kancollet_timersetting_softwarename.id = 'kancollet-timersetting-softwarename';
@@ -498,7 +570,7 @@ var Kancollet = (function () {
 			*/
 
 			var kancollet_timersetting_close = document.createElement('span');
-			kancollet_timersetting_close.setAttribute('onclick','Kancollet.remove()');
+			kancollet_timersetting_close.addEventListener('click', function() { Kancollet.remove(); } );
 			var kancollet_timersetting_closeimg = document.createElement('img');
 			kancollet_timersetting_closeimg.id = 'kancollet-timersetting-closeimg';
 			kancollet_timersetting_closeimg.src = baseurl+'kancollet/img/close_button.png';

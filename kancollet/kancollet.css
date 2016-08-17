@@ -2,87 +2,117 @@
  *      syusui_s
  */
 
-#kancollet{
-	width: 800px;
-	overflow:hidden;
+div#kancollet {
+	width: 782px;
 	position: fixed;
 	top: 0;
 	left: 50%;
-	right: 50%;
-	margin: 1px -400px 0 -400px;
-	padding: 0 0.5em 0 0.5em;
+	margin: 0px -400px 0 -400px;
+	padding: 3px 8px 2px 8px;
 	background-color: #ffffff;
+	color: #222;
+	border: 1px #999 solid;
+	border-top: none;
 }
 
-#kancollet-timers-form{
+form#kancollet-timers-form {
 	float: left;
 	margin: -2px 0 0 0;
 	background-color: #ffffff;
+	font-size: 12px;
 }
 
-#kancollet-timers-table th,td{
-	font-size: 12px;
-	border: 1px #000000 solid;
-	padding: 0 0.25em 0 0.25em;
+table#kancollet-timers-table th, table#kancollet-timers-table td {
+	border: 1px #666 solid;
+	padding: 0 2px 0 2px;
 	margin: 0;
 	text-align: right;
+	height: 16px;
 }
 
-#kancollet-timers-table #expedition{
+table#kancollet-timers-table th#expedition {
 	color: #ffffff;
 	background-color: #30adb2;
 }
 
-#kancollet-timers-table #dock{
+table#kancollet-timers-table th#dock {
 	color: #ffffff;
 	background-color: #81c838;
 }
 
-#kancollet-timers-table #arsenal{
+table#kancollet-timers-table th#arsenal {
 	color: #ffffff;
 	background-color: #ff6600;
 }
 
-.timer-show{
-	margin-left: 0.5em;
+span.timer-name {
+	display: inline-block;
+	width: 50px;
 }
 
-.timer-button{
+span.timer-show {
+	display: inline-block;
+	width: 60px;
+	text-align: center;
+}
+
+button.timer-button {
+	background: transparent;
+	border: none;
 	margin: 0;
 	padding: 0;
-	margin-left: 0.25em;
-	height: 1em;
-	width: 1em;
+	width: 16px;
+	height: 16px;
+	text-align: center;
 }
 
-.timer-button img{
-	margin-bottom: -3px;
+button.timer-button > img {
+	opacity: 0.6;
+	vertical-align: middle;
+	margin-bottom: 2px;
 }
-.timer-button img:hover{
+
+button.timer-button#selected-timer > img {
+	opacity: 1.0;
+}
+
+button.timer-button > img:hover {
 	cursor: pointer;
+	opacity: 0.9;
 }
-#kancollet-timersetting-form{
+
+form#kancollet-timersetting-form {
 	text-align: right;
 	float: right;
 	background-color: #ffffff;
 }
 
-#kancollet-timersetting-form *{
-	margin-left: 0.25em;
-	margin-right: 0.25em;
-}
-#kancollet-timersetting-time {
-	width: 110px;
-}
-#kancollet-timersetting-softwarename{
-	margin-bottom: -1px;
-}
-#kancollet-timersetting-closeimg{
-	margin-bottom: -3px;
-}
-#kancollet-timersetting-closeimg:hover{
-	cursor: pointer;
+form#kancollet-timersetting-form * {
+	margin-left: 2px;
 }
 
-.clear{ clear: both; }
-.clear hr{ display: none; }
+input#kancollet-timersetting-start, input#kancollet-timersetting-stop {
+	width: 42px;
+	padding: 0;
+}
+
+input#kancollet-timersetting-time {
+	width: 110px;
+}
+
+img#kancollet-timersetting-softwarename {
+	margin-bottom: -1px;
+}
+
+img#kancollet-timersetting-closeimg {
+	margin-bottom: -3px;
+	opacity: 0.8;
+}
+
+img#kancollet-timersetting-closeimg:hover {
+	cursor: pointer;
+	opacity: 1.0;
+}
+
+div.clear { clear: both; }
+div.clear hr { display: none; }
