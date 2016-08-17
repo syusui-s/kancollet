@@ -3,23 +3,16 @@
  */
 
 div#kancollet {
-	width: 800px;
-	overflow: hidden;
+	width: 782px;
 	position: fixed;
 	top: 0;
 	left: 50%;
-	right: 50%;
 	margin: 0px -400px 0 -400px;
 	padding: 3px 8px 2px 8px;
 	background-color: #ffffff;
-	font-size: 16px;
 	color: #222;
 	border: 1px #999 solid;
 	border-top: none;
-}
-
-div#kancollet input[type="button"], div#kancollet input[type="submit"] {
-	padding: 1px 6px;
 }
 
 form#kancollet-timers-form {
@@ -96,6 +89,11 @@ form#kancollet-timersetting-form {
 
 form#kancollet-timersetting-form * {
 	margin-left: 2px;
+}
+
+input#kancollet-timersetting-start, input#kancollet-timersetting-stop {
+	width: 42px;
+	padding: 0;
 }
 
 input#kancollet-timersetting-time {
