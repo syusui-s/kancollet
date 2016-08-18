@@ -15,6 +15,7 @@ body {
 	padding: 32px 64px;
 	box-sizing: content-box;
 	box-shadow: #999 0 0 10px;
+	font-family: sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -102,8 +103,17 @@ nav#site-nav a {
 	width: 100%;
 	color: #555;
 }
+
 nav#site-nav li:hover a {
 	color: #111;
+}
+
+nav#site-nav li:active a {
+	color: #fff;
+}
+
+nav#site-nav li:active {
+	background: #999;
 }
 
 nav#site-nav ul > li {
@@ -152,11 +162,12 @@ a#bookmarklet:hover {
 	border: 1px dashed #474747;
 }
 
-a#bookmarklet:hover:after {
+#add-bookmark:hover:after {
 	content: "";
 	position: absolute;
 	margin: 0;
 	padding: 0;
+	left: 120px;
 	top: -318px;
 	display: block;
 	height: 320px;
