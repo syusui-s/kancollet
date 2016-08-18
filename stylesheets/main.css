@@ -33,6 +33,7 @@ ul, ol {
 p, ul, ol {
 	margin-top: 10px;
 	margin-bottom: 16px;
+	line-height: 23px;
 }
 
 header#page-header {
@@ -41,6 +42,7 @@ header#page-header {
 
 header#page-header div#banner {
 	display: block;
+	height: 96px;
 	padding-left: 96px;
 	background-image: url({{"/images/icon.png" | prepend: site.baseurl }});
 	background-repeat: no-repeat;
@@ -48,9 +50,10 @@ header#page-header div#banner {
 }
 
 header#page-header h1 {
-	font-size: 48px;
 	margin: 0;
 	padding: 0;
+	font-size: 48px;
+	line-height: 72px;
 }
 
 header#page-header h1 > a {
@@ -66,6 +69,7 @@ header#page-header p#short-description {
 	padding: 0;
 	margin-top: -16px;;
 	font-size: 21px;
+	line-height: 32px;
 }
 
 nav#site-nav {
