@@ -26,5 +26,5 @@ links:
     - title: "View on Github"
       url: "https://github.com/syusui-s/kancollet/"
 
-kancollet-code: "javascript:(function(){if(document.getElementById('kancollet_script')){Kancollet.create();}else{var e=document.createElement('script');e.setAttribute('language','javascript');e.id='kancollet_script';e.type='text/javascript';e.setAttribute('src','http://syusui-s.github.io/kancollet/kancollet-master/kancollet/kancollet.js');e.setAttribute('charset','UTF-8');document.head.appendChild(e);}}());"
+kancollet-code: "javascript:(function(){if(document.getElementById('kancollet_script')){Kancollet.create();}else{var e=document.createElement('script');e.setAttribute('language','javascript');e.id='kancollet_script';e.type='text/javascript';e.setAttribute('src','https://syusui-s.github.io/kancollet/kancollet-master/kancollet/kancollet.js');e.setAttribute('charset','UTF-8');document.head.appendChild(e);}}());"
 
