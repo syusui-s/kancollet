@@ -1,8 +1,9 @@
 ---
 layout: page
+settings_button: "http://syusui-s.github.io/kancollet/kancollet-master/kancollet/img/setting_button.png"
 ---
 <p>
-<img id="screenshot" src="{{ "/images/screenshot.png" | prepend: site.baseurl }}" width="820px" alt="Kancolletのスクリーンショットをこの文章の位置に掲載しています。">
+<img id="screenshot" src="{{ "/images/screenshot.png" | prepend: site.baseurl }}" width="820" alt="Kancolletのスクリーンショットをこの文章の位置に掲載しています。">
 </p>
 
 <div class="big-centered">
@@ -25,7 +26,7 @@ window.addEventListener("load", function() {
 	</noscript>
 	<p>
 		<a id="bookmarklet"  href="{{ site.kancollet-code }}">
-			<span>Kancollet<span>
+			<span>Kancollet</span>
 		</a>
 	</p>
 </div>
@@ -55,7 +56,7 @@ window.addEventListener("load", function() {
 <li><a href="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/">艦隊これくしょん</a>を開きます。</li>
 <li>ブックマークに追加したKancolletをクリックします。</li>
 <li>上部にKancolletのウィンドウが開きます。</li>
-<li>設定したいタイマーの設定ボタン<img src="">を押して、右の入力欄から時間をセットします。</li>
+<li>設定したいタイマーの設定ボタン（<img src="{{ page.settings_button }}" height="16" alt="設定ボタン">）を押して、右の入力欄から時間をセットします。</li>
 <li>「開始」を押し、タイマーを始動させます。</li>
 <li>時間が来たら、表示は「完了」に変わります。</li>
 </ol>

@@ -150,11 +150,12 @@ a#bookmarklet:hover {
 
 a#bookmarklet:hover:after {
 	content: "";
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	top: -318px;
 	display: block;
 	height: 320px;
 	width: 235px;
-	margin: 0;
-	padding: 0;
-	margin-top: -349px;
 	background: url({{"/images/drag_to_bookmarkbar.png" | prepend: site.baseurl }}) no-repeat;
 }
