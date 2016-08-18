@@ -143,6 +143,7 @@ div#add-bookmark {
 	position: relative;
 	margin: auto;
 	height: 42px;
+	width: 281px;
 }
 
 a#bookmarklet {
@@ -158,7 +159,7 @@ a#bookmarklet {
 	font-weight: bold;
 }
 
-a#bookmarklet:hover {
+a#bookmarklet:hover, a#bookmarklet:active {
 	border: 1px dashed #474747;
 }
 
@@ -167,7 +168,6 @@ a#bookmarklet:hover {
 	position: absolute;
 	margin: 0;
 	padding: 0;
-	left: 120px;
 	top: -318px;
 	display: block;
 	height: 320px;
