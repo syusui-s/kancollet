@@ -31,11 +31,14 @@ ul, ol {
 	margin-left: 20px;
 }
 
-p, ul, ol {
+p, ul, ol, dl {
 	margin-top: 10px;
 	margin-bottom: 16px;
 	line-height: 23px;
 }
+
+dt { font-weight: bold; }
+dd { margin-left: 40px; }
 
 header#page-header {
 	margin-bottom: 24px;
