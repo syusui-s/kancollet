@@ -38,7 +38,7 @@ var Kancollet = (function () {
 
 		var timer_show = document.createElement('span');
 		timer_show.className = 'timer-show';
-		timer_show.textContent = '　未設定 ';
+		timer_show.textContent = '未設定';
 
 		var timer_button = document.createElement('button');
 		timer_button.className = 'timer-button';
@@ -118,7 +118,7 @@ var Kancollet = (function () {
 	Timer.prototype.stopTimer = function () {
 		if (this.timer) {
 			if (this.isElapsed()) {
-				this.timer_show.textContent = '　完了　';
+				this.timer_show.textContent = '完了';
 				this.changeBGColor('complete');
 				this.notification();
 			}
@@ -556,45 +556,50 @@ var Kancollet = (function () {
 			kancollet_timersetting_stop.disabled = true;
 			kancollet_timersetting_stop.addEventListener('click', function() { Kancollet.TimerSetting.stopTimer(); } );
 
-			var kancollet_timersetting_softwarename = document.createElement('img');
-			kancollet_timersetting_softwarename.id = 'kancollet-timersetting-softwarename';
-			kancollet_timersetting_softwarename.src = baseurl + 'kancollet/img/kancollet.png';
-			kancollet_timersetting_softwarename.alt = 'Kancollet';
-			kancollet_timersetting_softwarename.width  = '78';
-			kancollet_timersetting_softwarename.height = '15';
-
-			/*
-			var kancollet_timersetting_setting = document.createElement('a');
-			kancollet_timersetting_setting.setAttribute('href','#');
-			kancollet_timersetting_setting.textContent = '設定';
-			*/
-
-			var kancollet_timersetting_close = document.createElement('span');
-			kancollet_timersetting_close.addEventListener('click', function() { Kancollet.remove(); } );
-			var kancollet_timersetting_closeimg = document.createElement('img');
-			kancollet_timersetting_closeimg.id = 'kancollet-timersetting-closeimg';
-			kancollet_timersetting_closeimg.src = baseurl+'kancollet/img/close_button.png';
-			kancollet_timersetting_closeimg.alt = '閉じる';
-			kancollet_timersetting_closeimg.width  = '16';
-			kancollet_timersetting_closeimg.height = '16';
-			kancollet_timersetting_close.appendChild(kancollet_timersetting_closeimg);
-
-			var kancollet_timersetting_cleardiv = document.createElement('div');
-			kancollet_timersetting_cleardiv.className = 'clear';
-			kancollet_timersetting_cleardiv.appendChild(document.createElement('hr'));
-
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_time);
 			kancollet_timersetting_form.appendChild(Preset.createDatalist());
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_start);
 			kancollet_timersetting_form.appendChild(kancollet_timersetting_stop);
-			kancollet_timersetting_form.appendChild(document.createElement('br'));
-			kancollet_timersetting_form.appendChild(kancollet_timersetting_softwarename);
-			// kancollet_timersetting_form.appendChild(kancollet_timersetting_setting);
-			kancollet_timersetting_form.appendChild(kancollet_timersetting_close);
-			kancollet_timersetting_form.appendChild(kancollet_timersetting_cleardiv);
+
+			var kancollet_banner = document.createElement('div');
+			kancollet_banner.id = 'kancollet-banner';
+
+			var kancollet_banner_softwarename = document.createElement('img');
+			kancollet_banner_softwarename.id = 'kancollet-banner-softwarename';
+			kancollet_banner_softwarename.src = baseurl + 'kancollet/img/kancollet.png';
+			kancollet_banner_softwarename.alt = 'Kancollet';
+			kancollet_banner_softwarename.width  = '78';
+			kancollet_banner_softwarename.height = '15';
+
+			/*
+			var kancollet_banner_setting = document.createElement('a');
+			kancollet_banner_setting.setAttribute('href','#');
+			kancollet_banner_setting.textContent = '設定';
+			*/
+
+			var kancollet_banner_close = document.createElement('button');
+			kancollet_banner_close.id = 'kancollet-banner-close';
+			kancollet_banner_close.addEventListener('click', function() { Kancollet.remove(); } );
+			var kancollet_banner_closeimg = document.createElement('img');
+			kancollet_banner_closeimg.id = 'kancollet-banner-closeimg';
+			kancollet_banner_closeimg.src = baseurl+'kancollet/img/close_button.png';
+			kancollet_banner_closeimg.alt = '閉じる';
+			kancollet_banner_closeimg.width  = '16';
+			kancollet_banner_closeimg.height = '16';
+			kancollet_banner_close.appendChild(kancollet_banner_closeimg);
+
+			var kancollet_banner_cleardiv = document.createElement('div');
+			kancollet_banner_cleardiv.className = 'clear';
+			kancollet_banner_cleardiv.appendChild(document.createElement('hr'));
+
+			kancollet_banner.appendChild(kancollet_banner_softwarename);
+			// kancollet_banner.appendChild(kancollet_banner_setting);
+			kancollet_banner.appendChild(kancollet_banner_close);
+			kancollet_banner.appendChild(kancollet_banner_cleardiv);
 
 			kancollet.appendChild(kancollet_timers_form);
 			kancollet.appendChild(kancollet_timersetting_form);
+			kancollet.appendChild(kancollet_banner);
 
 			var links = document.getElementsByTagName('link');
 			var check_css_exist = false;
