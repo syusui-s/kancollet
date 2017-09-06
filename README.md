@@ -32,6 +32,6 @@ Kancolletをブックマークに登録するだけで利用できます。
 ブラウザ対応やプラグイン版などについては、[Wiki](https://github.com/syusui-s/kancollet/wiki)をご覧ください。
 
 ## ライセンス
-Kancolletのファイル郡全体に、MIT Licenseを適応します。LICENSEファイルを参照してください。
+Kancolletのファイル郡全体に、MIT Licenseを適用します。LICENSEファイルを参照してください。
 [MIT Licenseの和訳はこちらにあります](http://sourceforge.jp/projects/opensource/wiki/licenses%2FMIT_license)
-（これはこのライセンスの和訳であり、適応されるライセンス自体ではありません）。
+（これはこのライセンスの和訳であり、適用されるライセンス自体ではありません）。
