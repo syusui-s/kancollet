@@ -1,4 +1,4 @@
-/* Kancollet ver 0.12.1
+/* Kancollet ver 0.12.2
  * Author: syusui_s
  *
  * official page: http://syusui-s.github.io/kancollet/
