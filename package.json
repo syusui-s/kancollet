@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "http-server -c-1 --port 12345 .",
+    "fix": "prettier --write .",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.4.2"
+  },
+  "lint-staged": {
+    "*.{js,json,md,html}": "prettier --write"
+  }
+}
